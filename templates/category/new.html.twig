@@ -1,0 +1,17 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Add New Category</h1>
+
+        {{ form_start(form, {'attr': {'class': 'mt-4'}}) }}
+        
+        <div class="mb-3">
+            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Add category</button>
+        
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

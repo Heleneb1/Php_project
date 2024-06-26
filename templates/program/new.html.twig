@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add New Program{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Add New Program</h1>
+
+        {{ form_start(form, {'attr': {'class': 'mt-4'}}) }}
+        
+        <div class="mb-3">
+            {{ form_label(form.title) }}
+            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.title) }}
+        </div>
+        
+        <div class="mb-3">
+            {{ form_label(form.synopsis) }}
+            {{ form_widget(form.synopsis, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.synopsis) }}
+        </div>
+        
+        <div class="mb-3">
+            {{ form_label(form.poster) }}
+            {{ form_widget(form.poster, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.poster) }}
+        </div>
+        
+        <div class="mb-3">
+            {{ form_label(form.category) }}
+            {{ form_widget(form.category, {'attr': {'class': 'form-select'}}) }}
+            {{ form_errors(form.category) }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Add program</button>
+        
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

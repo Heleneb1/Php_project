@@ -8,11 +8,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends AbstractController
 {
+  
     #[Route('/', name: 'app_index')]
     public function index(): Response
     {
+        $name = 'Mon site de séries';
         return $this->render('index.html.twig', [
-            'page_title' => 'Bienvenue !',
+            'page_title' =>'Mon site de séries',
+            'name' => $name,
         ]);
     }
 }

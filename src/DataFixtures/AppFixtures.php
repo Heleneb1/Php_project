@@ -9,9 +9,21 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
+        // This is now handled by Doctrine's dependency management
+        // $categoryFixtures = new CategoryFixtures();
+        // $categoryFixtures->load($manager);
+        
+        // $programFixtures = new ProgramFixtures();
+        // $programFixtures->load($manager);
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            CategoryFixtures::class,
+            ProgramFixtures::class,  // Make sure all dependent fixtures are listed here
+        ];
     }
 }

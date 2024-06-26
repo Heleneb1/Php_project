@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ program.title }} - Season {{ season.number }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="mt-5">{{ program.title }} - Season {{ season.number }}</h1>
+        <p>{{ season.description }}</p>
+
+        <h2 class="mt-4">Episodes</h2>
+        <div class="list-group">
+            {% for episode in season.episodes %}
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <!-- Ajouter l'image ici -->
+                            <img src="{{ asset('images/episode.jpg') }}" class="img-fluid" alt="Episode Image">
+                        </div>
+                        <div class="col-md-9">
+                            <h5 class="mb-1">                         
+                                <a href="{{ path('program_episode_show', { programId: program.id, seasonId: season.id, episodeId: episode.id }) }}">
+                                    Episode {{ episode.number }}: {{ episode.title }}
+                                </a>
+                            </h5>
+                            <p class="mb-1">{{ episode.synopsis }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

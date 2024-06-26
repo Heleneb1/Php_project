@@ -1,4 +1,11 @@
-$primary: #828484;
+// styles.scss
+
+$primary: #045d4e;
 $secondary: #fff;
+$third: #890582;
 
 @import "~bootstrap/scss/bootstrap";
+
+.custom-third-color {
+    color: $third;
+}
