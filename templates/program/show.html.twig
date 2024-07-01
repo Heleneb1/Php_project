@@ -1,29 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Série  { id: program.id }{% endblock %}
+{% block title %}Série  { id: program.id }
+{% endblock %}
 
 {% block body %}
-<div class="container">
-    <article class="my-4">
-        <h1>{{ program.title }}</h1>
-        <p>{{ program.synopsis }}</p>
-        <p>Catégorie : {{ program.category.name }}</p>
-    </article>
+	<div class="container">
+		<article class="my-4">
+			<h1>{{ program.title }}</h1>
+			<p>{{ program.synopsis }}</p>
+			<p>Catégorie :
+				{{ program.category.name }}</p>
+		</article>
 
-    <h2 class="mt-4">Seasons</h2>
-    <ul class="list-unstyled">
-        {% for season in program.seasons %}
-            <li class="my-2">
-                <a href="{{ path('program_show_season', { programId: program.id, seasonId: season.id }) }}" class="text-decoration-none">
-                    <span class="badge bg-primary me-2">Season {{ season.number }}</span> ({{ season.year }})
-                </a>
-               
-            </li>
-        {% endfor %}
-    </ul>
+		<h2 class="mt-4">Seasons</h2>
+		<ul class="list-unstyled">
+			{% for season in program.seasons %}
+				<li class="my-2">
+					<a href="{{ path('program_show_season', { programId: program.id, seasonId: season.id }) }}" class="text-decoration-none">
+						<span class="badge bg-primary me-2">Season
+							{{ season.number }}</span>
+						({{ season.year }})
+					</a>
+				</li>
+			{% endfor %}
+		</ul>
+		<div class="m-3 d-flex justify-content-between">
+			<a href="{{ path('program_edit', {'id': program.id}) }}" class="btn btn-primary">Modifier</a>
+			{{ include('program/_delete_form.html.twig') }}
+		</div>
+		<strong>Acteurs :</strong>
+		<ul class="list-group">
+			{% for actor in program.actors %}
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					<a href="{{ path('app_actor_show', { id: actor.id }) }}">{{ actor.name }}</a>
+				</li>
+			{% else %}
+				<li class="list-group-item">Aucun acteur pour cette série</li>
+			{% endfor %}
+		</ul>
+	</div>
+	<a href="{{ path('program_index') }}" class="btn btn-outline-primary mt-3 ms-2">
+		<i class="bi bi-skip-backward-fill"></i>
+		Retour à la liste des programmes
+	</a>
 
-    <a href="{{ path('program_index') }}" class="btn btn-secondary mt-3">
-        Retour à la liste des programmes
-    </a>
-</div>
+
 {% endblock %}

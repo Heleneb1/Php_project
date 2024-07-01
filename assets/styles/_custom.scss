@@ -1,11 +1,15 @@
-// styles.scss
-
 $primary: #045d4e;
 $secondary: #fff;
 $third: #890582;
 
+// Importer Bootstrap après avoir défini vos variables personnalisées
 @import "~bootstrap/scss/bootstrap";
 
+// Utiliser les variables personnalisées
+.custom-primary-color {
+    color: $primary; // Appliquer la couleur définie par la variable $primary
+}
+
 .custom-third-color {
-    color: $third;
+    color: $third; // Appliquer la couleur définie par la variable $third
 }

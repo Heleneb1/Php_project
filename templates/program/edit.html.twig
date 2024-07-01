@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Add New Program
+{% block title %}Edit Program
 {% endblock %}
 
 {% block body %}
 	<div class="container mt-4">
-		<h1>Add New Program</h1>
+		<h1>Edit Program</h1>
 
 		{{ form_start(form, {'attr': {'class': 'mt-4'}}) }}
 
@@ -32,18 +32,15 @@
 			{{ form_widget(form.category, {'attr': {'class': 'form-select'}}) }}
 			{{ form_errors(form.category) }}
 		</div>
+
 		<div class="mb-3">
-			<li class="list-group-item">
-				{{ form_label(form.actors) }}
-				{# {{ form_widget(form.actors, {'attr': {'class': 'form-select'}}) }} #}
-				{{form_widget(form.actors, {'attr': {'class': 'form-control'}}) }}
-				{{ form_errors(form.actors) }}
-			</li>
+			{{ form_label(form.actors) }}
+			{{ form_widget(form.actors, {'attr': {'class': 'form-check'}}) }}
+			{{ form_errors(form.actors) }}
 		</div>
 
-		<button type="submit" class="btn btn-primary">Add program</button>
+		<button type="submit" class="btn btn-primary">Update Program</button>
 
 		{{ form_end(form) }}
-
 	</div>
 {% endblock %}
