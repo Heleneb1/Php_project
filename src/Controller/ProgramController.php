@@ -18,6 +18,7 @@ use App\Form\ProgramType;
 use Symfony\Componet\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Service\ProgramDuration;
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
@@ -92,11 +93,27 @@ class ProgramController extends AbstractController
     //         'program' => $program,
     //     ]);
     // }
-    #[Route('/{id}', name: 'show')]
-    public function show(Program $program): Response
-    {
-        return $this->render('program/show.html.twig', ['program' => $program]);
+    // #[Route('/{id}', name: 'show')]
+    // public function show(Program $program): Response
+    // {
+    //     return $this->render('program/show.html.twig', ['program' => $program]);
+    // }
+    #[Route('/{slug}', name: 'show')]
+    public function show(
+        #[MapEntity(mapping: ['slug' => 'slug'])] Program $program,//utilisation de l'attribut mapping pour indiquer que le paramètre slug de la route correspond à l'attribut slug de l'entité Program
+        ProgramDuration $programDuration
+    ): Response {
+        // Calculate the duration using the ProgramDuration service
+        $duration = $programDuration->calculate($program);
+
+        // Render the template and pass the program and duration variables
+        return $this->render('program/show.html.twig', [
+            'program' => $program,
+            'duration' => $duration,
+        ]);
     }
+
+    
         // #[Route('/{programId}/season/{seasonId}', name: 'show_season')]
     // public function showSeason(
     //     int $programId,

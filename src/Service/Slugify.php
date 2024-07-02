@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service;
+use App\Entity\Program;
 
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -15,6 +16,9 @@ class Slugify
 
     public function slugify(string $string): string
     {
-        return $this->slugger->slug($string)->lower();
+        $slug = $this->slugger->slug($string)->lower();
+        echo $slug.PHP_EOL;
+        return $slug;
     }
+    
 }
