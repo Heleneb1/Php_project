@@ -29,7 +29,7 @@ class Episode
     private ?Season $season = null;
 
      #[ORM\Column]
-     private ?int $duration = null;
+     private ?int $duration = null; //modifier Episodetype dans le dossier Form
 
 
     public function getId(): ?int

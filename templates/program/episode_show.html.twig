@@ -29,7 +29,7 @@
 			</div>
 			<div class="card-footer">
 				<div class="d-grid gap-2 d-md-flex  display: flex flex:space-between">
-					<a href="{{ path('program_show', { id: program.id }) }}" class="btn btn-outline-info mt-3">
+					<a href="{{ path('program_show', { slug: program.slug }) }}" class="btn btn-outline-info mt-3">
 						Retour à la série
 					</a>
 					<a href="{{ path('program_show_season', { programId: program.id, seasonId: season.id }) }}" class="btn btn-outline-info mt-3">

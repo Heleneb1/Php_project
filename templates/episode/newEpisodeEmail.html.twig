@@ -1,0 +1,11 @@
+{% extends 'layoutEmail.html.twig' %}
+
+{% block content %}
+	<h2>Nouvel Épisode Ajouté:
+		{{ episode.title }}</h2>
+	<p>Bonjour,</p>
+	<p>Nous sommes ravis de vous informer qu'un nouvel épisode intitulé "{{ episode.title }}" (Épisode
+		{{ episode.number }}) a été ajouté à la série "{{ program.title}}" sur Mon site de séries.</p>
+	<p>Découvrez-le
+		<a href="{{ url('app_episode_show', {'id': episode.id}) }}">ici</a>.</p>
+{% endblock %}

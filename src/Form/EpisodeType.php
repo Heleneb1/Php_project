@@ -21,6 +21,7 @@ class EpisodeType extends AbstractType
                 'class' => Season::class,
                 'choice_label' => 'number',
             ])
+            ->add('duration') // Ajoutez cette ligne
         ;
     }
 

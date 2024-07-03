@@ -19,10 +19,20 @@ use Symfony\Componet\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Service\ProgramDuration;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use App\Service\EmailService;
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
 {
+    private $emailService;
+
+    public function __construct(EmailService $emailService)
+    {
+        $this->emailService = $emailService;
+    }
+   
     // #[Route('/', name: 'index')]
     // public function index(ProgramRepository $programRepository): Response
     // {
@@ -56,8 +66,38 @@ class ProgramController extends AbstractController
             ['total' => $total, 'programs' => $programs]
         );
     }
+    // #[Route('/new', name: 'program_new')]
+    // public function new(Request $request, MailerInterface $mailer, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    // {
+    //     $program = new Program();
+    //     $form = $this->createForm(ProgramType::class, $program);
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $slug = $slugger->slug($program->getTitle())->lower(); // Convert slug to lower case
+    //         $program->setSlug($slug);
+    //         $entityManager->persist($program);
+    //         $entityManager->flush();
+
+    //         $email = (new Email())
+    //         ->from($this->getParameter('mailer_from'))
+    //         ->to('your_email@example.com')
+    //         ->subject('Une nouvelle série vient d\'être publiée !')
+    //         ->html($this->renderView('Program/newProgramEmail.html.twig', ['program' => $program]));
+    //         $mailer->send($email);
+
+    //         // Define the success flash message once the form is submitted, valid and the data inserted in the database
+    //         $this->addFlash('success', 'The new program has been created');
+
+    //         return $this->redirectToRoute('program_index');
+    //     }
+
+    //     return $this->render('program/new.html.twig', [
+    //         'form' => $form->createView(),
+    //     ]);
+    // }   
     #[Route('/new', name: 'program_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, ): Response
     {
         $program = new Program();
         $form = $this->createForm(ProgramType::class, $program);
@@ -69,7 +109,15 @@ class ProgramController extends AbstractController
             $entityManager->persist($program);
             $entityManager->flush();
 
-            // Define the success flash message once the form is submitted, valid and the data inserted in the database
+            // Utiliser le service d'email
+            $this->emailService->send(
+                'your_email@example.com',
+                'Une nouvelle série vient d\'être publiée !',
+                'Program/newProgramEmail.html.twig',
+                ['program' => $program]
+            );
+
+            // Définir le message flash de succès
             $this->addFlash('success', 'The new program has been created');
 
             return $this->redirectToRoute('program_index');
@@ -78,7 +126,9 @@ class ProgramController extends AbstractController
         return $this->render('program/new.html.twig', [
             'form' => $form->createView(),
         ]);
-    }    // #[Route('/show/{id<^[0-9]+$>}', name: 'show')]
+    }
+
+     // #[Route('/show/{id<^[0-9]+$>}', name: 'show')]
     // public function show(int $id, ProgramRepository $programRepository): Response
     // {
     //     $program = $programRepository->findOneBy(['id' => $id]);

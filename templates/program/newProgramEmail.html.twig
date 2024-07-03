@@ -1,0 +1,9 @@
+{% extends 'layoutEmail.html.twig' %}
+{% block content %}
+	<h2>Nouvelle Série Ajoutée:
+		{{ program.title }}</h2>
+	<p>Bonjour,</p>
+	<p>Nous sommes ravis de vous informer qu'une nouvelle série intitulée "{{ program.title }}" a été ajoutée dans Mon site de séries.</p>
+	<p>Découvrez-la
+		<a href="{{ path('program_show', { slug: program.slug }) }}}">ici</a>.</p>
+{% endblock %}
