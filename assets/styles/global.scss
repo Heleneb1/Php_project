@@ -1,11 +1,33 @@
-// styles.scss
-
-$primary: #074a85;
+$primary: #078587;
 $secondary: #fff;
 $third: #890582;
 
+// Importer les fichiers de Bootstrap
+
 @import "~bootstrap/scss/bootstrap";
 
+// Utiliser les variables personnalisées
+.custom-primary-color {
+  color: $primary;
+}
+
 .custom-third-color {
-    color: $third;
+  color: $third;
+}
+
+.actor-image {
+
+  height: 300px;
+  object-fit: contain;
+}
+
+.btn.btn-outline-primary {
+  color: $primary; // Couleur normale du texte
+  border-color: $primary; // Couleur de la bordure normale
+
+  &:hover {
+    color: #fff; // Couleur du texte au survol
+    background-color: $primary; // Fond du bouton au survol, si nécessaire
+    border-color: $primary; // Couleur de la bordure au survol, si nécessaire
+  }
 }

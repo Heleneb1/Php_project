@@ -7,12 +7,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use DateTimeInterface;
+use DateTime;
 
 
 
 #[ORM\Entity(repositoryClass: ProgramRepository::class)]
+#[Vich\Uploadable]
 #[UniqueEntity('title', message: 'Ce titre existe déjà')]
 class Program
 {
@@ -39,10 +44,18 @@ class Program
     )]
     private ?string $synopsis = null;
 
+    
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $poster = null;
 
-    
+  
+    #[Vich\UploadableField(mapping: 'poster_file', fileNameProperty: 'poster')]
+    #[Assert\File(
+    maxSize: '1M',
+    mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+    )]
+    private ?File $posterFile = null; // On ajoute un champ pour stocker temporairement le fichier poster pas de colonne en base de données
+
     #[ORM\ManyToOne(inversedBy: 'programs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
@@ -60,12 +73,15 @@ class Program
     #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'programs', fetch: 'EXTRA_LAZY')]
     #[ORM\JoinTable(name: 'actor_program')]
     private Collection $actors;
+     //si la relation est bidirectionnelle, on doit ajouter les méthodes addActor et removeActor
+    //si pas de resultat on doit inverser le mappedBy et inversedBy
 
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
-    //si la relation est bidirectionnelle, on doit ajouter les méthodes addActor et removeActor
-    //si pas de resultat on doit inverser le mappedBy et inversedBy
-    
+   
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?DatetimeInterface $updatedAt = null;
+
     public function __construct()
     {
         $this->seasons = new ArrayCollection();
@@ -196,5 +212,26 @@ class Program
 
         return $this;
     }
+    public function setPosterFile(File $image = null): Program
+    {
+       $this->posterFile = $image;
+       if ($image) {
+          $this->updatedAt = new DateTime('now');
+       }
     
+       return $this;
+    }
+    public function getPosterFile(): ?File
+    {
+       return $this->posterFile;
+    }
+    public function getUpdatedAt(): ?DatetimeInterface
+    {
+        return $this->updatedAt;
+    }
+    public function setUpdatedAt(DatetimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
 }

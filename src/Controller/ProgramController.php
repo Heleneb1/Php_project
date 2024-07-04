@@ -227,7 +227,7 @@ class ProgramController extends AbstractController
             $this->addFlash('success', 'The program has been updated');
 
             // return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
-            return $this->redirectToRoute('program_show', ['id' => $program->getId()]);
+            return $this->redirectToRoute('program_show', ['slug' => $program->getSlug()]);
         }
 
         return $this->render('program/edit.html.twig', [

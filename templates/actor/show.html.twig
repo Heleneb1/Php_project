@@ -13,12 +13,21 @@
 				<div class="card">
 					<div class="card-body">
 						<h1 class="card-title">{{ actor.name }}</h1>
+						<div class="col-md-4">
+							{% if actor.picture %}
+								<img src="{{ vich_uploader_asset(actor, 'pictureFile') }}" alt="{{ actor.name }}" class="img-fluid rounded-start">
+							{% elseif actor.gender == 'female' %}
+								<img src="{{ asset('uploads/images/female-actor.jpg') }}" class="card-img-top actor-image" alt="{{ actor.name }}">
+							{% elseif actor.gender == 'male' %}
+								<img src="{{ asset('uploads/images/male-actor.png') }}" class="card-img-top actor-image" alt="{{ actor.name }}">
+							{% endif %}
+						</div>
 
 						<h2 class="card-subtitle mt-3">Séries associées :</h2>
 						<ul class="list-group">
 							{% for program in actor.programs %}
 								<li class="list-group-item">
-									<a href="{{ path('program_show', { id: program.id }) }}">{{ program.title }}</a>
+									<a href="{{ path('program_show', { slug: program.slug }) }}">{{ program.title }}</a>
 								</li>
 							{% else %}
 								<li class="list-group-item">Aucune série associée.</li>
