@@ -20,6 +20,9 @@
 				<th>Synopsis</th>
 				<td>{{ episode.synopsis }}</td>
 			</tr>
+			<td>
+				<img src="{{ vich_uploader_asset(episode, 'posterFile') }}" alt="{{ episode.title }}" class="img-fluid rounded-start">
+			</td>
 			<tr>
 				<th>Number</th>
 				<td>{{ episode.number }}</td>

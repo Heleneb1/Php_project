@@ -22,6 +22,15 @@
 				<h3 class="card-title">Episode
 					{{ episode.number }}:
 					{{ episode.title }}</h3>
+				<div
+					class="col-md-3">
+					<!-- Ajouter l'image ici -->
+					{% if episode.poster %}
+						<img src="{{ vich_uploader_asset(episode, 'posterFile') }}" class="img-fluid" alt="{{episode.title}}">
+					{% else %}
+						<img src="{{ asset('uploads/images/episode-default.jpg') }}" class="img-fluid" alt="{{episode.title}}">
+					{% endif %}
+				</div>
 				<p class="card-text">{{ episode.synopsis }}</p>
 				<p class="card-text">Durée:
 					{{ episode.duration }}

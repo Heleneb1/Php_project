@@ -19,13 +19,18 @@ final class Version20240702143643 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE episode ADD duration INT NOT NULL');
+        $table = $schema->getTable('episode');
+        if (!$table->hasColumn('duration')) {
+            $this->addSql('ALTER TABLE episode ADD duration INT NOT NULL');
+        }
     }
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE episode DROP duration');
+        $table = $schema->getTable('episode');
+        if ($table->hasColumn('duration')) {
+            $this->addSql('ALTER TABLE episode DROP duration');
+        }
     }
+    
 }

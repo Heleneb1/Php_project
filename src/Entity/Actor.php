@@ -115,16 +115,17 @@ class Actor
     return $this->picture;
     }
 
-
     public function getPictureFile(): ?File
     {
         return $this->pictureFile;
     }
+    
     public function setPicture(string $picture): Actor
     {
         $this->picture = $picture;
         return $this;
     }
+    
     public function setPictureFile(File $image = null): Actor
     {
         $this->pictureFile = $image;

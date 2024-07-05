@@ -53,13 +53,14 @@
 				<div class="col-md-4 mb-3">
 					<div class="card">
 						<div class="card">
-							{% if actor.gender == 'female' %}
+							{% if actor.picture %}
+								<img src="{{ vich_uploader_asset(actor, 'pictureFile') }}" alt="{{ actor.name }}" class="card-img-top actor-image">
+							{% elseif actor.gender == 'female' %}
 								<img src="{{ asset('uploads/images/female-actor.jpg') }}" class="card-img-top actor-image" alt="{{ actor.name }}">
 							{% elseif actor.gender == 'male' %}
 								<img src="{{ asset('uploads/images/male-actor.png') }}" class="card-img-top actor-image" alt="{{ actor.name }}">
 							{% endif %}
 						</div>
-
 						<div class="card-body">
 							<h5 class="card-title">{{ actor.name }}</h5>
 							<a href="{{ path('app_actor_show', { id: actor.id }) }}" class="btn btn-outline-primary">Voir Profil</a>

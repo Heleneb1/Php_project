@@ -17,6 +17,14 @@
 					<th class="mb-3">Number</th>
 					<td>{{ season.number }}</td>
 				</tr>
+				{% if season.poster %}
+					<tr class="mb-3">
+						<th class="mb-3">Poster</th>
+						<td>
+							<img src="{{ vich_uploader_asset(season, 'posterFile') }}" alt="{{ season.number }}" class="img-fluid rounded-start">
+						</td>
+					</tr>
+				{% endif %}
 				<tr class="mb-3">
 					<th class="mb-3">Year</th>
 					<td>{{ season.year }}</td>

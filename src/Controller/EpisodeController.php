@@ -11,6 +11,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Entity\Comment;
+use App\Form\CommentType;
+//TODO revoir l'ajout de commentaire dans le controller le deplacer dans programme controller
 
 #[Route('/episode')]
 class EpisodeController extends AbstractController
@@ -62,7 +65,6 @@ class EpisodeController extends AbstractController
             'form' => $form,
         ]);
     }
-
     #[Route('/{id}', name: 'app_episode_show', methods: ['GET'])]
     public function show(Episode $episode): Response
     {
@@ -70,6 +72,23 @@ class EpisodeController extends AbstractController
             'episode' => $episode,
         ]);
     }
+    // #[Route('/{id}', name: 'app_episode_show', methods: ['GET'])]
+    // public function show($id, EpisodeRepository $episodeRepository, Request $request, EntityManagerInterface $entityManager): Response    {
+    //     $comment = new Comment();
+    //     $form = $this->createForm(CommentType::class, $comment);
+    //     $form->handleRequest($request);
+    //     $episode = $episodeRepository->find($id);
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $comment->setEpisode($episode);
+    //         $comment->setAuthor($this->getUser());
+    //         $entityManager->persist($comment);
+    //         $entityManager->flush();
+    //         return $this->redirectToRoute('app_episode_show', ['id' => $id]);
+    //     }
+    //     return $this->render('episode/show.html.twig', [
+    //         'episode' => $episode,
+    //     ]);
+    // }
 
     #[Route('/{id}/edit', name: 'app_episode_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Episode $episode, EntityManagerInterface $entityManager): Response

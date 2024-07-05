@@ -6,8 +6,16 @@ use App\Repository\EpisodeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use DateTimeInterface;
+use DateTime;
+
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
+#[Vich\Uploadable]
 class Episode
 {
     #[ORM\Id]
@@ -30,8 +38,21 @@ class Episode
 
      #[ORM\Column]
      private ?int $duration = null; //modifier Episodetype dans le dossier Form
-
-
+     
+     #[ORM\Column(length: 255, nullable: true)]
+     private ?string $poster = null;
+ 
+   
+     #[Vich\UploadableField(mapping: 'poster_file', fileNameProperty: 'poster')]
+     #[Assert\File(
+     maxSize: '1M',
+     mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+     )]
+     private ?File $posterFile = null; // On ajoute un champ pour stocker temporairement le fichier poster pas de colonne en base de données
+ 
+     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+     private ?DatetimeInterface $updatedAt = null;
+ 
     public function getId(): ?int
     {
         return $this->id;
@@ -94,4 +115,37 @@ class Episode
 
         return $this;
     }
+    public function getPoster(): ?string
+    {
+        return $this->poster;
+    }
+    public function setPoster(?string $poster): self
+    {
+        $this->poster = $poster;
+
+        return $this;
+    }
+    public function getPosterFile(): ?File
+    {
+        return $this->posterFile;
+    }
+    public function setPosterFile(File $image = null): Episode
+    {
+        $this->posterFile = $image;
+        if ($image) {
+            $this->updatedAt = new DateTime('now');
+        }
+
+        return $this;
+    }
+    public function getUpdatedAt(): ?DatetimeInterface
+    {
+        return $this->updatedAt;
+    }
+    public function setUpdatedAt(DatetimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
 }
