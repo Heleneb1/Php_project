@@ -22,6 +22,10 @@ use App\Service\ProgramDuration;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use App\Service\EmailService;
+use App\Form\CommentType;
+use App\Entity\Comment;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
@@ -97,7 +101,7 @@ class ProgramController extends AbstractController
     //     ]);
     // }   
     #[Route('/new', name: 'program_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, ): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger ): Response
     {
         $program = new Program();
         $form = $this->createForm(ProgramType::class, $program);
@@ -106,6 +110,7 @@ class ProgramController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $slug = $slugger->slug($program->getTitle())->lower(); // Convert slug to lower case
             $program->setSlug($slug);
+            $program->setOwner($this->getUser());
             $entityManager->persist($program);
             $entityManager->flush();
 
@@ -192,6 +197,7 @@ class ProgramController extends AbstractController
     //         'season' => $season,
     //     ]);
     // }
+
     #[Route('/{programId}/season/{seasonId}', name: 'show_season')]
     public function showSeason(
     #[MapEntity(mapping: ['programId' => 'id'])] Program $program,
@@ -203,40 +209,61 @@ class ProgramController extends AbstractController
             'season' => $season,
         ]);
     }
+    //TODO revoir pour ajouter un bouton pour laisser un commentaire
     #[Route('/{programId}/season/{seasonId}/episode/{episodeId}', name: 'episode_show')]
     public function progamEpisodeShow(
-    #[MapEntity(mapping: ['programId' => 'id'])] Program $program,
-    #[MapEntity(mapping: ['seasonId' => 'id'])] Season $season,
-    #[MapEntity(mapping: ['episodeId' => 'id'])] Episode $episode,
-    ): Response
-    {
+        #[MapEntity(mapping: ['programId' => 'id'])] Program $program,
+        #[MapEntity(mapping: ['seasonId' => 'id'])] Season $season,
+        #[MapEntity(mapping: ['episodeId' => 'id'])] Episode $episode,
+        Request $request, // Ajout de la requête en tant que paramètre
+        EntityManagerInterface $entityManager // Ajout du gestionnaire d'entités en tant que paramètre
+    ): Response {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setEpisode($episode);// Associe le commentaire à l'épisode
+            $comment->setAuthor($this->getUser());// Récupère l'utilisateur connecté
+            $entityManager->persist($comment);// Persiste l'entité en base de données
+            $entityManager->flush();
+        }
+    //Recuperer les commentaires de l'épisode par ordre de publication
+    $comments = $entityManager->getRepository(Comment::class)
+    ->findBy(['episode' => $episode], ['createdAt' => 'ASC']);
+
         return $this->render('program/episode_show.html.twig', [
             'program' => $program,
             'season' => $season,
             'episode' => $episode,
+            'form' => $form->createView(), // Ajouter cette ligne pour passer le formulaire à la vue
+            'comments' => $comments, // Ajouter cette ligne pour passer les commentaires à la vue
         ]);
     }
-    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Program $program, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{slug}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    public function edit(#[MapEntity(mapping: ['slug' => 'slug'])] Program $program, Request $request, EntityManagerInterface $entityManager): Response
     {
+        if ($this->getUser() !== $program->getOwner()) {
+            // Si ce n'est pas le propriétaire, déclenche une exception d'accès interdit 403
+            throw $this->createAccessDeniedException('Only the owner can edit the program!');
+        }
+        
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
             $this->addFlash('success', 'The program has been updated');
-
-            // return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+    
             return $this->redirectToRoute('program_show', ['slug' => $program->getSlug()]);
         }
-
+    
         return $this->render('program/edit.html.twig', [
-            'program' => $program, // Add a comma here
+            'program' => $program,
             'form' => $form->createView(),
         ]);
     }
-
-    #[Route('/{id}', name: 'delete', methods: ['POST'])]
+        #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Program $program, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $program->getId(), $request->request->get('_token'))) {

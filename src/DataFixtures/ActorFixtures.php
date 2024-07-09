@@ -18,6 +18,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             $actor = new Actor();
             $actor->setName($faker->name());
             $actor->setGender($faker->randomElement(['male', 'female']));
+            $actor->setBiography($faker->paragraphs(6, true));
 
             // Choose 3 distinct random programs for each actor
             $chosenPrograms = [];

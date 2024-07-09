@@ -5,7 +5,7 @@
 
 {% block body %}
 	<div class="container">
-		<h1 class="mt-4">Notre catalogue:</h1>
+		<h1 class="mt-4 ">Notre catalogue:</h1>
 
 		{% for category, messages in app.flashes %}
 			{% for message in messages %}
@@ -20,6 +20,9 @@
 				{% for program in programs %}
 					<div class="col">
 						<div class="card h-100">
+							{% if is_granted("ROLE_ADMIN") %}
+								<a href="{{ path('program_edit', { 'slug': program.slug} ) }}">Éditer</a>
+							{% endif %}
 							{% if program.poster %}
 								<img src="{{ vich_uploader_asset(program) }}" class="card-img-top" alt="{{ program.title }}">
 							{% else %}
@@ -30,7 +33,14 @@
 								<h6 class="card-subtitle mb-2 text-muted">Catégorie:
 									{{ program.category.name }}</h6>
 								<p class="card-text flex-grow-1">{{ program.synopsis }}</p>
-								<a href="{{ path('program_show', { slug: program.slug }) }}" class="btn btn-primary mt-auto text-white">Voir la fiche</a>
+								<a href="{{ path('program_show', { slug: program.slug }) }}" class="btn btn-primary mt-auto">
+									Voir la fiche
+									<div class="circle-icon d-inline-flex justify-content-center align-items-center rounded-circle">
+										<i class="bi bi-play"></i>
+									</div>
+								</a>
+
+
 							</div>
 						</div>
 					</div>
@@ -40,6 +50,7 @@
 			<p class="mt-4">Aucune série trouvée.</p>
 		{% endif %}
 
-		<a href="{{ path('app_index') }}" class="btn btn-secondary mt-3">Retour à l'accueil</a>
+		<a href="{{ path('app_index') }}" class="btn btn-outline-primary">
+			<i class="bi bi-skip-backward-fill"></i>Retour à l'accueil</a>
 	</div>
 {% endblock %}

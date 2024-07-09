@@ -32,6 +32,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $slug = $this->slugger->slugify($title);
             $program->setSlug($slug);
             $program->setSynopsis($faker->paragraphs(2, true));
+            $program->setOwner($this->getReference('user_' . $faker->numberBetween(0, 5)));
             $program->setCategory($this->getReference('category_' . $faker->numberBetween(1, 5)));
 
             $manager->persist($program);

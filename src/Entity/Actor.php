@@ -48,7 +48,10 @@ class Actor
     private ?File $pictureFile = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null; // On ajoute un champ pour stocker temporairement le fichier poster pas de colonne en base de données
+    private ?\DateTimeInterface $updatedAt = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $biography = null; // On ajoute un champ pour stocker temporairement le fichier poster pas de colonne en base de données
 
     
     public function __construct()
@@ -143,6 +146,18 @@ class Actor
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    public function getBiography(): ?string
+    {
+        return $this->biography;
+    }
+
+    public function setBiography(string $biography): static
+    {
+        $this->biography = $biography;
+
         return $this;
     }
 }

@@ -1,11 +1,12 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Comment
 {
     #[ORM\Id]
@@ -21,6 +22,12 @@ class Comment
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?User $author = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Episode $episode = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable:true) ] // Ajout de l'annotation pour la date de création
+    private ?\DateTimeInterface $createdAt = null;
 
     public function getId(): ?int
     {
@@ -51,14 +58,38 @@ class Comment
         return $this;
     }
 
-    public function getAuthorId(): ?User
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-    public function setAuthorId(?User $author): static
+    public function setAuthor(?User $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getEpisode(): ?Episode
+    {
+        return $this->episode;
+    }
+
+    public function setEpisode(?Episode $episode): static
+    {
+        $this->episode = $episode;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+    #[ORM\PrePersist]
+    public function setCreatedAt(): self
+    {
+        $this->createdAt = new \DateTimeImmutable();
 
         return $this;
     }

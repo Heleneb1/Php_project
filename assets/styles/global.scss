@@ -1,10 +1,17 @@
-$primary: #078587;
+//Faire yarn build pour compiler le fichier scss en css
+$primary: #136878;
 $secondary: #fff;
-$third: #890582;
+$third: #e036c1;
+$black: #3e3c3e;
+$delete: #5f5c5c;
 
 // Importer les fichiers de Bootstrap
-
 @import "~bootstrap/scss/bootstrap";
+
+body {
+  font-family: 'Roboto', sans-serif;
+  color: $secondary;
+}
 
 // Utiliser les variables personnalisées
 .custom-primary-color {
@@ -13,21 +20,118 @@ $third: #890582;
 
 .custom-third-color {
   color: $third;
+  font-weight: bold;
+}
+
+.blur-background {
+  position: relative;
+  overflow: hidden;
+  padding: 1.5rem;
+  /* Pour contenir le pseudo-élément */
+}
+
+
+
+.bg-linear-gradient {
+  background: rgb(62, 60, 62);
+  background: -moz-linear-gradient(90deg, rgba(62, 60, 62, 1) 0%, rgba(19, 104, 120, 1) 23%);
+  background: -webkit-linear-gradient(90deg, rgba(62, 60, 62, 1) 0%, rgba(19, 104, 120, 1) 23%);
+  background: linear-gradient(90deg, rgba(62, 60, 62, 1) 0%, rgba(19, 104, 120, 1) 23%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3e3c3e", endColorstr="#136878", GradientType=1);
+}
+
+
+
+.blur-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12.9px);
+  -webkit-backdrop-filter: blur(12.9px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: -1;
 }
 
 .actor-image {
-
   height: 300px;
   object-fit: contain;
 }
 
-.btn.btn-outline-primary {
+.btn.btn-outline-info {
   color: $primary; // Couleur normale du texte
   border-color: $primary; // Couleur de la bordure normale
+  margin: 0.5rem; // Marge autour du bouton
+  font-weight: bold;
+
+
+  &:hover {
+    color: $secondary; // Couleur du texte au survol
+    background-color: $primary; // Fond du bouton au survol, si nécessaire
+    border-color: $primary; // Couleur de la bordure au survol, si nécessaire
+  }
+}
+
+.btn.btn-outline-primary {
+  color: $secondary; // Couleur normale du texte
+  border-color: $secondary; // Couleur de la bordure normale
+  margin: 0.5rem; // Marge autour du bouton
+  position: relative;
+  overflow: hidden;
+  font-weight: bold;
+  text-shadow: #292f2f 5px 5px 15px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12.9px);
+    ;
+    -webkit-backdrop-filter: blur(12.9px);
+    ;
+    z-index: -1;
+  }
 
   &:hover {
     color: #fff; // Couleur du texte au survol
     background-color: $primary; // Fond du bouton au survol, si nécessaire
     border-color: $primary; // Couleur de la bordure au survol, si nécessaire
   }
+}
+
+.season-year {
+  color: $secondary; // Change this to your desired color
+  font-weight: bold; // Optional: make the text bold
+  padding-right: 0.5rem; // Optional: add some space to the right of the text
+}
+
+.circle-icon {
+  width: 30px;
+  /* Ajustez la taille selon vos besoins */
+  height: 30px;
+  background-color: transparent;
+  /* Couleur de fond, peut être ajustée */
+  border: 2px solid $secondary;
+  /* Bordure pour correspondre à votre bouton */
+  font-size: 16px;
+  /* Taille de l'icône */
+}
+
+
+body {
+  background-image: url('../images/background.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
