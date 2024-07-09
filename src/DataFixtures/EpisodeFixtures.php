@@ -25,6 +25,7 @@ for ($programId = 1; $programId <= 10; $programId++) {
             // Obtention d'une référence à la saison correspondante
             $seasonReference = 'season_' . $programId . '_' . $seasonId;
             $episode->setSeason($this->getReference($seasonReference));
+            $episode->setDuration($faker->numberBetween(40, 90));
 
             $manager->persist($episode);
             $this->addReference('episode_' . $programId . '_' . $seasonId . '_' . $j, $episode);

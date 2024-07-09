@@ -1,29 +1,90 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ program.title }} - Season {{ season.number }} - {{ episode.title }} Episode {{ episode.number }}{% endblock %}
+{% block title %}
+	{{ program.title }}
+	- Saison
+	{{ season.number }}
+	- Épisode
+	{{ episode.number }}:
+	{{ episode.title }}
+{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <div class="card">
-            <div class="card-header">
-                <h1 class="card-title">{{ program.title }}</h1>
-                <h2 class="card-subtitle text-muted">Season {{ season.number }}</h2>
-            </div>
-            <div class="card-body">
-                <h3 class="card-title">Episode {{ episode.number }}: {{ episode.title }}</h3>
-                <p class="card-text">{{ episode.synopsis }}</p>
-            </div>
-          <div class="card-footer">
-    <div class="d-grid gap-2 d-md-flex  display: flex flex:space-between">
-        <a href="{{ path('program_show', { id: program.id }) }}" class="btn btn-outline-info mt-3">
-            Retour à la série
-        </a>
-        <a href="{{ path('program_show_season', { programId: program.id, seasonId: season.id }) }}" class="btn btn-outline-info mt-3">
-            Retour à la saison
-        </a>
-    </div>
-</div>
-
-        </div>
-    </div>
+	<div class="container mt-5">
+		<div class="card">
+			<div class="card-header">
+				<h1 class="card-title">{{ program.title }}</h1>
+				<h2 class="card-subtitle text-muted">Saison
+					{{ season.number }}</h2>
+			</div>
+			<div class="card-body">
+				<h3 class="card-title">Épisode
+					{{ episode.number }}:
+					{{ episode.title }}</h3>
+				<div class="row">
+					<div class="col-md-3">
+						{% if episode.poster %}
+							<img src="{{ vich_uploader_asset(episode, 'posterFile') }}" class="img-fluid" alt="{{ episode.title }}">
+						{% else %}
+							<img src="{{ asset('uploads/images/episode-default.jpg') }}" class="img-fluid" alt="{{ episode.title }}">
+						{% endif %}
+					</div>
+					<div class="col-md-9">
+						<p class="card-text">{{ episode.synopsis }}</p>
+						<p class="card-text">Durée:
+							{{ episode.duration }}
+							minutes</p>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer d-flex justify-content-between">
+				<a href="{{ path('program_show', { slug: program.slug }) }}" class="btn btn-outline-info">
+					<i class="bi bi-skip-backward-fill"></i>
+					Retour à la série
+				</a>
+				<a href="{{ path('program_show_season', { programId: program.id, seasonId: season.id }) }}" class="btn btn-outline-info">
+					Retour à la saison
+					<i class="bi bi-skip-forward-fill"></i>
+				</a>
+			</div>
+			{% if app.user %}
+				<div class="card-footer">
+					<div class="container">
+						<h2>Formulaire de Commentaire</h2>
+						{{ form_start(form, {'attr': {'class': 'row g-3'}}) }}
+						<div class="col-md-12">
+							{{ form_label(form.comment, 'Commentaire') }}
+							{{ form_widget(form.comment, {'attr': {'class': 'form-control', 'rows': 10}}) }}
+						</div>
+						<div class="col-md-6">
+							{{ form_row(form.rate, {'attr': {'class': 'form-control', 'placeholder': 'Note'}}) }}
+						</div>
+						<div class="col-md-6">
+							{{ form_row(form.author, {'attr': {'class': 'form-control'}}) }}
+						</div>
+						<div class="col-md-12">
+							<button type="submit" class="btn btn-outline-info">Ajouter un commentaire</button>
+						</div>
+						{{ form_end(form) }}
+					</div>
+				</div>
+			{% endif %}
+			<div class="card-footer">
+				<h2>Commentaires</h2>
+				{% for comment in comments %}
+					<div class="card mt-3">
+						<div class="card-header d-flex justify-content-between">
+							<h3 class="card-title">{{ comment.author.email }}</h3>
+							<span class="text-muted">{{ comment.createdAt|date('d/m/Y') }}</span>
+						</div>
+						<div class="card-body">
+							<p class="card-text">{{ comment.comment }}</p>
+						</div>
+					</div>
+				{% else %}
+					<p>Aucun commentaire pour le moment.</p>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 {% endblock %}

@@ -7,7 +7,7 @@
 /public/bundles/
 /var/
 /vendor/
-.env
+/.env
 /node_modules/
 ###< symfony/framework-bundle ###
 
@@ -24,6 +24,7 @@
 ###> symfony/asset-mapper ###
 /public/assets/
 /assets/vendor/
+/public/uploads/
 ###< symfony/asset-mapper ###
 
 ###> symfony/webpack-encore-bundle ###
@@ -32,3 +33,8 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###

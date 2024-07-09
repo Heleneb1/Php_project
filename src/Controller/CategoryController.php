@@ -11,6 +11,7 @@ use App\Form\CategoryType;
 use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class CategoryController extends AbstractController
 {
@@ -24,7 +25,7 @@ class CategoryController extends AbstractController
         ]);
     }
     // Add a new category before the show method
-    #[Route('/category/new', name: 'new')]
+    #[Route('/category/new', name: 'new'), isGranted('ROLE_ADMIN')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $category = new Category();

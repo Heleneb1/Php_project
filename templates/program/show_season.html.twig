@@ -1,32 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ program.title }} - Season {{ season.number }}{% endblock %}
+{% block title %}
+	{{ program.title }}
+	- Season
+	{{ season.number }}
+{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1 class="mt-5">{{ program.title }} - Season {{ season.number }}</h1>
-        <p>{{ season.description }}</p>
+	<div class="container">
+		<h1 class="mt-5 ">{{ program.title }}
+			- Saison
+			{{ season.number }}</h1>
+		<p>{{ season.description }}</p>
 
-        <h2 class="mt-4">Episodes</h2>
-        <div class="list-group">
-            {% for episode in season.episodes %}
-                <div class="list-group-item">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <!-- Ajouter l'image ici -->
-                            <img src="{{ asset('images/episode.jpg') }}" class="img-fluid" alt="Episode Image">
-                        </div>
-                        <div class="col-md-9">
-                            <h5 class="mb-1">                         
-                                <a href="{{ path('program_episode_show', { programId: program.id, seasonId: season.id, episodeId: episode.id }) }}">
-                                    Episode {{ episode.number }}: {{ episode.title }}
-                                </a>
-                            </h5>
-                            <p class="mb-1">{{ episode.synopsis }}</p>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+		<h2 class="mt-4">Episodes</h2>
+		<div class="list-group">
+			{% for episode in season.episodes %}
+				<div class="list-group-item">
+					<div class="row">
+						<div
+							class="col-md-3">
+							<!-- Ajouter l'image ici -->
+							{% if episode.poster %}
+								<img src="{{ vich_uploader_asset(episode, 'posterFile') }}" class="img-fluid" alt="{{episode.title}}">
+							{% else %}
+								<img src="{{ asset('uploads/images/episode-default.jpg') }}" class="img-fluid" alt="{{episode.title}}">
+							{% endif %}
+						</div>
+						<div class="col-md-9">
+							<h5 class="mb-1">
+								<a href="{{ path('program_episode_show', { programId: program.id, seasonId: season.id, episodeId: episode.id }) }}">
+									Episode
+									{{ episode.number }}:
+									{{ episode.title }}
+								</a>
+							</h5>
+							<p class="mb-1">{{ episode.synopsis }}</p>
+							<small>{{ episode.duration }}
+								minutes</small>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
 {% endblock %}

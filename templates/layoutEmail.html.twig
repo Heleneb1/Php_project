@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Email from Mon site de séries</title>
+		<style>/* Ajoute ici tes styles pour les emails */</style>
+</head>
+<body>
+	<header>
+		<h1>Mon site de séries</h1>
+	</header>
+	<main>
+		{% block content %}{% endblock %}
+	</main>
+	<footer>
+		<p>&copy;
+			{{ "now"|date("Y") }}
+			Mon site de séries</p>
+	</footer>
+</body></html>

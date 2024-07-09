@@ -17,10 +17,11 @@ class SeasonFixtures extends Fixture implements DependentFixtureInterface
         // Création des saisons
         for ($programId = 1; $programId <= count($programs); $programId++) {
             // Création de 5 saisons pour chaque programme
+            $startYear = $faker->year();
             for ($i = 1; $i <= 5; $i++) {
                 $season = new Season();
                 $season->setNumber($i);
-                $season->setYear($faker->year());
+                $season->setYear($startYear + $i);// Génération d'une année aléatoire pour chaque saison 
                 $season->setDescription($faker->paragraphs(1, true));
                 // Obtention d'une référence à un programme
                 $programReference = 'program_' . $programId;

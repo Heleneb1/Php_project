@@ -44,8 +44,12 @@
         "symfony/web-link": "7.1.*",
         "symfony/webpack-encore-bundle": "^2.1",
         "symfony/yaml": "7.1.*",
+        "symfonycasts/reset-password-bundle": "^1.22",
+        "symfonycasts/verify-email-bundle": "^1.17",
+        "twbs/bootstrap-icons": "^1.11",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "^2.12|^3.0",
+        "vich/uploader-bundle": "^2.4"
     },
     "config": {
         "allow-plugins": {
@@ -99,6 +103,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.6",
+        "friendsofphp/php-cs-fixer": "^3.59",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "7.1.*",
         "symfony/css-selector": "7.1.*",
