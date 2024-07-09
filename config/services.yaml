@@ -13,6 +13,8 @@ services:
     autowire: true # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+    bind:
+      $formLoginAuthenticator: "@security.authenticator.form_login.main"
   # makes classes in src/ available to be used as services
   # this creates a service per class whose id is the fully-qualified class name
   App\:
@@ -27,3 +29,8 @@ services:
   App\Service\Slugify:
     arguments:
       $slugger: "@slugger"
+
+  App\Security\UserAuthenticator:
+    autowire: true
+  App\Security\EmailVerifier:
+    autowire: true
