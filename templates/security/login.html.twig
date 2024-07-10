@@ -26,8 +26,11 @@
 					<label for="password" class="mb-1">Password</label>
 					<input type="password" name="_password" id="password" class="form-control mb-3" autocomplete="current-password" required>
 				</div>
+				<a href="{{ path('app_forgot_password_request') }}" class="text-decoration-none">Mot de passe oublié ?</a>
+
 				<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 				<div class="form-group form-check">
+
 					<input type="checkbox" class="form-check-input" id="exampleCheck1" name="_remember_me">
 					<label class="form-check-label" for="exampleCheck1">Remember me</label>
 				</div>
