@@ -14,11 +14,26 @@
 					<a class="nav-link text-white" href="{{ path('program_index') }}">Série</a>
 				</li>
 				<li class="nav-item">
-					{% if app.user %}
-						<a class="nav-link text-white" href="{{ path('app_logout') }}">Se déconnecter</a>
-                       {# <p class= "text-white"> {{ app.user.email }}</p> #}
+					{# {% if app.user %}
+																															<a class="nav-link text-white" href="{{ path('app_logout') }}">Se déconnecter</a> #}
+					{# <p class= "text-white"> {{ app.user.email }}</p> #}
+					{# {% else %}
+																															<a class="nav-link text-white" href="{{ path('app_login') }}">Se connecter</a>
+																														{% endif %} #}
+						{% if not app.user %}
+							<li>
+								<a class="nav-link text-white" href="{{ path('app_register') }}"> S'inscrire</a>
+						</li>
+						<li>
+							<a class="nav-link text-white" href="{{ path('app_login') }}">Se connecter</a>
+						</li>
 					{% else %}
-						<a class="nav-link text-white" href="{{ path('app_login') }}">Se connecter</a>
+						<li>
+							<a class="nav-link text-white" href="{{ path('user_profile') }}">Mon compte</a>
+						</li>
+						<li>
+							<a class="nav-link text-white" href="{{ path('app_logout') }}">Se déconnecter</a>
+						</li>
 					{% endif %}
 				</li>
 				<li class="nav-item dropdown">

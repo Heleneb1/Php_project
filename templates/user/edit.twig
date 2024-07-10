@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le profil
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-4">
+		<h1>Modifier le profil</h1>
+
+		{{ form_start(form, {'attr': {'class': 'mt-4'}}) }}
+
+		<div class="mb-3">
+			{{ form_label(form.lastname) }}
+			{{ form_widget(form.lastname, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.lastname) }}
+		</div>
+
+		<div class="mb-3">
+			{{ form_label(form.firstname) }}
+			{{ form_widget(form.firstname, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.firstname) }}
+		</div>
+
+		<div class="mb-3">
+			{{ form_label(form.avatar) }}
+			{{ form_widget(form.avatar, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.avatar) }}
+		</div>
+
+		<div class="mb-3">
+			{{ form_label(form.biography) }}
+			{{ form_widget(form.biography, {'attr': {'class': 'form-select'}}) }}
+			{{ form_errors(form.biography) }}
+		</div>
+		<div class="mb-3">
+			{{ form_label(form.email) }}
+			{{ form_widget(form.email, {'attr': {'class': 'form-select'}}) }}
+			{{ form_errors(form.email) }}
+		</div>
+
+		<button type="submit" class="btn btn-primary">Update Profile</button>
+
+		{{ form_end(form) }}
+	</div>
+{% endblock %}
