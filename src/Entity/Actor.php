@@ -126,6 +126,7 @@ class Actor
     public function setPicture(string $picture): Actor
     {
         $this->picture = $picture;
+
         return $this;
     }
     
@@ -134,7 +135,7 @@ class Actor
         $this->pictureFile = $image;
         if ($image) {
             $this->updatedAt = new DateTime('now');
-         }
+        }
 
         return $this;
     }
@@ -142,7 +143,7 @@ class Actor
     {
         return $this->updatedAt;
     }
-   
+    
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;

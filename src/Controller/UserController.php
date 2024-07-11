@@ -37,6 +37,8 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+             // Réinitialisez l'objet File
+            $user->setAvatarFile(null);
 
             return $this->redirectToRoute('user_profile'); // Redirige vers la page de profil après modification
         }

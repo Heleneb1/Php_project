@@ -5,15 +5,22 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\DBAL\Types\Types;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use DateTimeInterface;
+use DateTime;
+
 
 //TODO revoir avatar
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[Vich\Uploadable]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -65,6 +72,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatar = null;
 
+    #[vich\UploadableField(mapping: 'poster_file', fileNameProperty: 'avatar')]
+    #[Assert\File(
+        maxSize: '1M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+    )]
+    private ?File $avatarFile = null;
+
+    #[ORM\Column(type: TYPES:: DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null; // On ajoute un champ pour stocker temporairement le fichier avatar pas de colonne en base de données
+  
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -259,9 +276,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->avatar;
     }
 
-    public function setAvatar(string $avatar): static
+    public function setAvatar(?string $avatar):static
     {
         $this->avatar = $avatar;
+    
+        return $this;
+    }
+    
+    public function getAvatarFile(): ?File
+    {
+        return $this->avatarFile;
+    }
+    public function setAvatarFile(File $image = null): User
+    {
+        $this->avatarFile = $image;
+
+        if ($image) {
+            $this->updatedAt = new DateTime('now');
+        }
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
