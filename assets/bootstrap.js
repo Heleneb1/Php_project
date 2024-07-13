@@ -1,9 +1,7 @@
-// import { startStimulusApp } from '@symfony/stimulus-bundle';
+import { startStimulusApp } from '@symfony/stimulus-bridge';
 
-// // Start the Stimulus application
-// export const app = startStimulusApp(require.context(
-//     '@symfony/stimulus-bundle/controllers',
-//     true,
-//     /\.(j|t)sx?$/
-// ));
-
+export const app = startStimulusApp(require.context(
+    '@symfony/stimulus-bridge/lazy-controller-loader!./controllers',
+    true,
+    /\.[jt]sx?$/
+));

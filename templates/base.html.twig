@@ -14,14 +14,14 @@
 			{{ encore_entry_link_tags('global') }}
 		{% endblock %}
 		{% block javascripts %}
-			{# {{ encore_entry_script_tags('app') }} #}
+			{{ encore_entry_script_tags('app') }}
 			{{ encore_entry_script_tags('global') }}
 			{% block importmap %}
 				{{ importmap('app') }}
 			{% endblock %}
 		{% endblock %}
 	</head>
-	<body>
+	<body {{ stimulus_controller('theme') }} {{ stimulus_target('theme', 'body') }}>
 		<header>
 			{% include '_navbar.html.twig' %}
 		</header>
