@@ -81,6 +81,7 @@ class ProgramController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $search = $form->getData()['search'];
             $programs = $programRepository->findLikeNameOrActorName($search);
+            return $this->redirectToRoute('program_search_results', ['query' => $search]);
         } else {
             $programs = $programRepository->findAll();
         }
@@ -90,7 +91,25 @@ class ProgramController extends AbstractController
             'programs' => $programs,
         ]);
     }
-    
+    #[Route('/search/{query}', name: 'search_results')]
+    public function searchResults(string $query, Request $request, ProgramRepository $programRepository): Response
+    {
+        $form = $this->createForm(SearchProgramType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->getData()['search'];
+            return $this->redirectToRoute('program_search_results', ['query' => $search]);
+        }
+
+        $programs = $programRepository->findLikeNameOrActorName($query);
+
+        return $this->render('program/index.html.twig', [
+            'form' => $form->createView(),
+            'programs' => $programs,
+        ]);
+    }
+  
     // #[Route('/new', name: 'program_new')]
     // public function new(Request $request, MailerInterface $mailer, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     // {
