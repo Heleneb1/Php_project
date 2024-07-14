@@ -5,6 +5,7 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Faker\Factory;
 
 class UserFixtures extends Fixture
 {
@@ -40,5 +41,20 @@ class UserFixtures extends Fixture
 
         // Sauvegarde des 2 nouveaux utilisateurs :
         $manager->flush();
+
+        // Enregistrement de références pour les utiliser dans d’autres fixtures
+        $faker = $faker = Factory::create('fr_FR');
+        for ($i = 0; $i < 10; $i++) {
+            $user = new User();
+            $user->setEmail($faker->email);
+            $user->setRoles(['ROLE_USER']);
+            $hashedPassword = $this->passwordHasher->hashPassword(
+                $user,
+                'userpassword'
+            );
+            $user->setPassword($hashedPassword);
+            $manager->persist($user);
+            $this->addReference('user_' . $i, $user);
+        }
     }
 }

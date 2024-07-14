@@ -82,7 +82,7 @@ class Program
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DatetimeInterface $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'programs')]
+    #[ORM\ManyToOne(inversedBy: 'programs', cascade: ["persist"])]
     private ?User $owner = null;
 
     public function __construct()

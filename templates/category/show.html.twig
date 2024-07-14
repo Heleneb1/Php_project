@@ -1,24 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ category.name }}{% endblock %}
+{% block title %}
+	{{ category.name }}
+{% endblock %}
 
 {% block body %}
-    <h1>Categorie: {{ category.name }}</h1>
+	<h1>Catégorie:
+		{{ category.name }}</h1>
 
-    {% if programs is empty %}
-        <p>Pas de series pour cette Catégorie.</p>
-    {% else %}
-        <ul>
-            {% for program in programs %}
-                <li>
-                    <strong>ID:</strong> {{ program.id }}<br>
-                    <strong>Title:</strong> {{ program.title }}<br>
-                    <strong>Synopsis:</strong> {{ program.synopsis }}<br>
-                    <a href="{{ path('program_show', { 'id': program.id }) }}">View Details</a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+	{% if programs is empty %}
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6">
+					<div class="card my-4">
+						<div class="card-body text-center">
+							<h1 class="card-title">Pas de séries pour cette catégorie.</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% else %}
+		<ul>
+			{% for program in programs %}
+				<li>
+					<div class="container">
+						<div class="card my-4">
+							<div class="row g-0">
+								<div class="col-md-4">
+									{% if program.poster %}
+										<img src="{{ program.poster }}" class="img-fluid rounded-start actor-image" alt="{{ program.title }}">
+									{% else %}
+										<img src="{{ asset('uploads/images/default-poster.png') }}" alt="{{ program.title }}" class="img-fluid rounded-start actor-image">
+									{% endif %}
+								</div>
+								<div class="col-md-8">
+									<div class="card-body">
+										<h1 class="card-title">{{ program.title }}</h1>
+										<p class="card-text">{{ program.synopsis }}</p>
+										<div class="card-footer d-flex justify-content-end">
+											<a href="{{ path('program_show', { slug: program.slug }) }}" class="btn btn-primary mt-auto">
+												Voir détails
+												<div class="circle-icon d-inline-flex justify-content-center align-items-center rounded-circle ms-2">
+													<i class="bi bi-play"></i>
+												</div>
+											</a>
+										</div>
 
-    <a href="{{ path('category_index') }}">Retour Categories</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+
+	<a href="{{ path('category_index') }}" class="btn btn-outline-primary mt-3">
+		<i class="bi bi-skip-backward-fill me-2"></i>Retour Catégories</a>
 {% endblock %}
