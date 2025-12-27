@@ -15,8 +15,31 @@ class ProgramRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Program::class);
     }
+    public function findLikeNameOrActorName(string $name)
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->where('p.title LIKE :name')
+            ->leftJoin('p.actors', 'a')
+            ->orWhere('a.name LIKE :name')
+            ->setParameter('name', '%' . $name . '%')
+            ->orderBy('p.title', 'ASC')
+            ->getQuery();
+    
+        return $queryBuilder->getResult();
+    }
 
-    //    /**
+    public function findWatchlist($userId)
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->join('p.viewers', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ->orderBy('p.title', 'ASC')
+            ->getQuery();
+    
+        return $queryBuilder->getResult();
+    }
+            //    /**
     //     * @return Program[] Returns an array of Program objects
     //     */
     //    public function findByExampleField($value): array

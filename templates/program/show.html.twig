@@ -1,12 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Série
+{% block title %}
+	Série -
 	{{ program.title }}
 {% endblock %}
 
 {% block body %}
-	<div class="container">
-		<div class="card my-4">
+	<div class="container mt-4">
+		<div class="card mb-4">
 			<div class="row g-0">
 				<div class="col-md-4">
 					{% if program.poster %}
@@ -18,16 +19,28 @@
 				<div class="col-md-8">
 					<div class="card-body">
 						<h1 class="card-title">{{ program.title }}</h1>
+
+						{% if app.user %}
+							<a id="watchlist" data-no-swup data-url="{{ path('program_watchlist', {id: program.id}) }}">
+								<i class="bi {{ app.user.isInWatchlist(program) ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+							</a>
+						{% else %}
+							<div class="alert alert-warning">Veuillez vous connecter pour ajouter à votre liste.</div>
+						{% endif %}
+
 						<p class="card-text">{{ program.synopsis }}</p>
 						<p class="card-text">
 							<strong>Catégorie :</strong>
-							{{ program.category.name }}</p>
+							{{ program.category.name }}
+						</p>
 						<p class="card-text">
 							<strong>Durée totale :</strong>
-							{{ duration }}</p>
+							{{ duration }}
+						</p>
+
 						{% if app.user %}
 							<div class="d-flex justify-content-between">
-								<a href="{{ path('program_edit', {'slug': program.slug}) }}" class="btn btn-primary ">Modifier</a>
+								<a href="{{ path('program_edit', {'slug': program.slug}) }}" class="btn btn-primary">Modifier</a>
 								{{ include('program/_delete_form.html.twig') }}
 							</div>
 						{% endif %}
@@ -35,36 +48,40 @@
 				</div>
 			</div>
 		</div>
-		<div class="container blur-background">
-			<h2 class=" mt-4  ">Saisons</h2>
-			<ul class="list-unstyled ">
-				{% for season in program.seasons %}
-					<li class="my-2">
-						<a href="{{ path('program_show_season', { programId: program.id, seasonId: season.id }) }}" class="text-decoration-none">
-							<span class="badge bg-primary me-2">Saison
-								<i class="bi bi-camera-reels-fill"></i>
-								{# <i class="bi bi-camera-video"></i> #}
-								{{ season.number }}</span>
-							<span class="season-year">{{ season.year }}</span>
-						</a>
-					</li>
-				{% endfor %}
-			</ul>
+
+		<div class="blur-background d-flex justify-content-center">
+			<div class="text-center">
+				<h2 class="my-4">Saisons</h2>
+				<ul class="list-unstyled">
+					{% for season in program.seasons %}
+						<li class="list-group-item d-flex justify-content-between align-items-center my-2">
+							<a href="{{ path('program_show_season', { programId: program.id, seasonId: season.id }) }}" class="text-decoration-none d-flex align-items-center">
+								<span class="badge bg-primary px-3">
+									Saison
+									<i class="bi bi-camera-reels-fill mx-2"></i>
+									{{ season.number }}
+								</span>
+								<span class="season-year ms-3 text-muted">Année:
+									{{ season.year }}</span>
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
 		</div>
-		<h3 class=" my-3  d-flex justify-content-center">Acteurs :</h3>
+
+		<h3 class="my-3 d-flex justify-content-center">Acteurs :</h3>
 		<div class="row">
 			{% for actor in program.actors %}
 				<div class="col-md-4 mb-3">
 					<div class="card">
-						<div class="card">
-							{% if actor.picture %}
-								<img src="{{ vich_uploader_asset(actor, 'pictureFile') }}" alt="{{ actor.name }}" class="card-img-top actor-image">
-							{% elseif actor.gender == 'female' %}
-								<img src="{{ asset('uploads/images/female-actor.jpg') }}" class="card-img-top actor-image" alt="{{ actor.name }}">
-							{% elseif actor.gender == 'male' %}
-								<img src="{{ asset('uploads/images/male-actor.png') }}" class="card-img-top actor-image" alt="{{ actor.name }}">
-							{% endif %}
-						</div>
+						{% if actor.picture %}
+							<img src="{{ vich_uploader_asset(actor, 'pictureFile') }}" alt="{{ actor.name }}" class="card-img-top actor-image">
+						{% elseif actor.gender == 'female' %}
+							<img src="{{ asset('uploads/images/female-actor.jpg') }}" class="card-img-top actor-image" alt="{{ actor.name }}">
+						{% elseif actor.gender == 'male' %}
+							<img src="{{ asset('uploads/images/male-actor.png') }}" class="card-img-top actor-image" alt="{{ actor.name }}">
+						{% endif %}
 						<div class="card-body">
 							<h5 class="card-title">{{ actor.name }}</h5>
 							<a href="{{ path('app_actor_show', { id: actor.id }) }}" class="btn btn-outline-info">Voir Profil</a>
@@ -79,7 +96,7 @@
 		</div>
 
 		<a href="{{ path('program_index') }}" class="btn btn-outline-primary mt-3">
-			<i class="bi bi-skip-backward-fill"></i>
+			<i class="bi bi-skip-backward-fill ms-2"></i>
 			Retour à la liste des programmes
 		</a>
 	</div>

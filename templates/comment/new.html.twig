@@ -1,11 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Comment{% endblock %}
+{% block title %}New Comment
+{% endblock %}
 
 {% block body %}
-    <h1>Create new Comment</h1>
+	<h1>Create new Comment</h1>
 
-    {{ include('comment/_form.html.twig') }}
-
-    <a href="{{ path('app_comment_index') }}">back to list</a>
+	{% if app.user and app.user.id == comment.author.id %}
+		{{ include('comment/_form.html.twig') }}
+		<a href="{{ path('app_comment_index') }}">Back to list</a>
+	{% else %}
+		<p>Vous n'avez pas les droits pour accéder à cette page</p>
+	{% endif %}
 {% endblock %}

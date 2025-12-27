@@ -1,0 +1,28 @@
+<div{{attributes}}>
+	<aside class="last-episodes mt-3">
+		<h2>Derniers épisodes</h2>
+		<div class="card-deck mt-3">
+			{% for episode in this.lastEpisodes %}
+				<div class="card mt-3">
+					<div class="card-body">
+						<a href="{{ path('program_episode_show', { programId: episode.season.program.id, seasonId: episode.season.id, episodeId: episode.id }) }}" class="text-decoration-none">
+							{% if episode.poster %}
+								<img src="{{ vich_uploader_asset(episode, 'posterFile') }}" class="img-fluid" alt="{{ episode.title }}">
+							{% else %}
+								<img src="{{ asset('uploads/images/episode-default.jpg') }}" class="img-fluid" alt="{{ episode.title }}">
+							{% endif %}
+							<h5 class="card-title">{{ episode.title }}</h5>
+							<p class="card-subtitle mb-2 text-muted">
+								Saison
+								{{ episode.season.number }}, Épisode
+								{{ episode.number }}<br>
+								Série :
+								{{ episode.season.program.title }}
+							</p>
+						</a>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</aside>
+</div>

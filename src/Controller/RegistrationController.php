@@ -57,7 +57,6 @@ class RegistrationController extends AbstractController
                 ['id '=> $user->getId()]//je recupere l'id de l'utilisateur c'est ok
                
             );
- // TODO: in a real app, send this as an email!
  $this->addFlash('success', 'Confirm your email to validate your account');
             // Generate a signed URL and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,

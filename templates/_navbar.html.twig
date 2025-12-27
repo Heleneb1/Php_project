@@ -1,4 +1,3 @@
-{# templates/_navbar.html.twig #}
 <nav class="navbar navbar-expand-lg navbar-primary bg-linear-gradient">
 	<div class="container-fluid">
 		<a class="navbar-brand text-white" href="{{ path('app_index') }}">Mon Site de séries</a>
@@ -13,29 +12,22 @@
 				<li class="nav-item">
 					<a class="nav-link text-white" href="{{ path('program_index') }}">Série</a>
 				</li>
-				<li class="nav-item">
-					{# {% if app.user %}
-																															<a class="nav-link text-white" href="{{ path('app_logout') }}">Se déconnecter</a> #}
-					{# <p class= "text-white"> {{ app.user.email }}</p> #}
-					{# {% else %}
-																															<a class="nav-link text-white" href="{{ path('app_login') }}">Se connecter</a>
-																														{% endif %} #}
-						{% if not app.user %}
-							<li>
-								<a class="nav-link text-white" href="{{ path('app_register') }}"> S'inscrire</a>
-						</li>
-						<li>
-							<a class="nav-link text-white" href="{{ path('app_login') }}">Se connecter</a>
-						</li>
-					{% else %}
-						<li>
-							<a class="nav-link text-white" href="{{ path('user_profile') }}">Mon compte</a>
-						</li>
-						<li>
-							<a class="nav-link text-white" href="{{ path('app_logout') }}">Se déconnecter</a>
-						</li>
-					{% endif %}
-				</li>
+
+				{% if not app.user %}
+					<li class="nav-item">
+						<a class="nav-link text-white" href="{{ path('app_register') }}">S'inscrire</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-white" href="{{ path('app_login') }}">Se connecter</a>
+					</li>
+				{% else %}
+					<li class="nav-item">
+						<a class="nav-link text-white" href="{{ path('user_profile') }}">Mon compte</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-white" href="{{ path('app_logout') }}">Se déconnecter</a>
+					</li>
+				{% endif %}
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle text-white" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 						Lien
@@ -54,7 +46,7 @@
 					</ul>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" style="color: #c64ba5;">Autre</a>
+					{{ component('Navbar') }}
 				</li>
 			</ul>
 			<form class="d-flex">
@@ -63,6 +55,9 @@
 					<i class="bi bi-search"></i>
 				</button>
 			</form>
+			<button class="btn btn-outline-dark rounded-circle d-flex align-items-center justify-content-center" {{ stimulus_action('theme', 'toggleDarkMode') }}>
+				<i class="bi bi-moon-stars-fill"></i>
+			</button>
 		</div>
 	</div>
 </nav>

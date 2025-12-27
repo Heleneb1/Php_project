@@ -82,13 +82,20 @@ class Program
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DatetimeInterface $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'programs')]
+    #[ORM\ManyToOne(inversedBy: 'programs', cascade: ["persist"])]
     private ?User $owner = null;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'watchlist')]
+    private Collection $viewers;
 
     public function __construct()
     {
         $this->seasons = new ArrayCollection();
         $this->actors = new ArrayCollection();
+        $this->viewers = new ArrayCollection();
     }
 
 
@@ -246,6 +253,33 @@ class Program
     public function setOwner(?User $owner): static
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getViewers(): Collection
+    {
+        return $this->viewers;
+    }
+
+    public function addViewer(User $viewer): static
+    {
+        if (!$this->viewers->contains($viewer)) {
+            $this->viewers->add($viewer);
+            $viewer->addWatchlist($this);
+        }
+
+        return $this;
+    }
+
+    public function removeViewer(User $viewer): static
+    {
+        if ($this->viewers->removeElement($viewer)) {
+            $viewer->removeWatchlist($this);
+        }
 
         return $this;
     }

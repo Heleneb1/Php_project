@@ -10,6 +10,8 @@ use App\Repository\SeasonRepository;
 use App\Entity\Program;
 use App\Entity\Season;
 use App\Entity\Episode;
+use App\Repository\EpisodeRepository;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +27,9 @@ use App\Service\EmailService;
 use App\Form\CommentType;
 use App\Entity\Comment;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
+use App\Form\SearchProgramType;
+use App\Repository\CommentRepository;
+use App\Repository\UserRepository;
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
@@ -47,29 +51,67 @@ class ProgramController extends AbstractController
     //         ['programs' => $programs]
     //     );
     // }
+    // #[Route('/', name: 'index')]
+    // public function index(RequestStack $requestStack, ProgramRepository $programRepository): Response
+    // {
+    //     // Récupère la session à partir de la RequestStack
+    //     $session = $requestStack->getSession();
+    
+    //     // Vérifie si la session a une clé 'total'. Si non, initialise à 0
+    //     if (!$session->has('total')) {
+    //         $session->set('total', 0);
+    //     }
+        
+    
+    //     // Récupère tous les programmes à partir du repository ProgramRepository
+    //     $programs = $programRepository->findAll();
+    
+    //     // Récupère la valeur actuelle de 'total' dans la session
+    //     $total = $session->get('total');
+    
+    //     // Rend le template Twig 'program/index.html.twig' avec les variables 'total' et 'programs'
+    //     return $this->render(
+    //         'program/index.html.twig',
+    //         ['total' => $total, 'programs' => $programs]
+    //     );
+    // }
     #[Route('/', name: 'index')]
-    public function index(RequestStack $requestStack, ProgramRepository $programRepository): Response
+    public function index(Request $request, ProgramRepository $programRepository): Response
     {
-        // Récupère la session à partir de la RequestStack
-        $session = $requestStack->getSession();
-    
-        // Vérifie si la session a une clé 'total'. Si non, initialise à 0
-        if (!$session->has('total')) {
-            $session->set('total', 0);
+        $form = $this->createForm(SearchProgramType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->getData()['search'];
+            $programs = $programRepository->findLikeNameOrActorName($search);
+            return $this->redirectToRoute('program_search_results', ['query' => $search]);
+        } else {
+            $programs = $programRepository->findAll();
         }
-    
-        // Récupère tous les programmes à partir du repository ProgramRepository
-        $programs = $programRepository->findAll();
-    
-        // Récupère la valeur actuelle de 'total' dans la session
-        $total = $session->get('total');
-    
-        // Rend le template Twig 'program/index.html.twig' avec les variables 'total' et 'programs'
-        return $this->render(
-            'program/index.html.twig',
-            ['total' => $total, 'programs' => $programs]
-        );
+
+        return $this->render('program/index.html.twig', [
+            'form' => $form->createView(),
+            'programs' => $programs,
+        ]);
     }
+    #[Route('/search/{query}', name: 'search_results')]
+    public function searchResults(string $query, Request $request, ProgramRepository $programRepository): Response
+    {
+        $form = $this->createForm(SearchProgramType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->getData()['search'];
+            return $this->redirectToRoute('program_search_results', ['query' => $search]);
+        }
+
+        $programs = $programRepository->findLikeNameOrActorName($query);
+
+        return $this->render('program/index.html.twig', [
+            'form' => $form->createView(),
+            'programs' => $programs,
+        ]);
+    }
+  
     // #[Route('/new', name: 'program_new')]
     // public function new(Request $request, MailerInterface $mailer, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     // {
@@ -99,7 +141,8 @@ class ProgramController extends AbstractController
     //     return $this->render('program/new.html.twig', [
     //         'form' => $form->createView(),
     //     ]);
-    // }   
+    // }  
+
     #[Route('/new', name: 'program_new')]
     public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger ): Response
     {
@@ -209,7 +252,6 @@ class ProgramController extends AbstractController
             'season' => $season,
         ]);
     }
-    //TODO revoir pour ajouter un bouton pour laisser un commentaire
     #[Route('/{programId}/season/{seasonId}/episode/{episodeId}', name: 'episode_show')]
     public function progamEpisodeShow(
         #[MapEntity(mapping: ['programId' => 'id'])] Program $program,
@@ -231,6 +273,7 @@ class ProgramController extends AbstractController
     //Recuperer les commentaires de l'épisode par ordre de publication
     $comments = $entityManager->getRepository(Comment::class)
     ->findBy(['episode' => $episode], ['createdAt' => 'ASC']);
+    
 
         return $this->render('program/episode_show.html.twig', [
             'program' => $program,
@@ -274,6 +317,30 @@ class ProgramController extends AbstractController
 
         return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
     }
-   
+    #[Route('/{id}/watchlist', methods: ['GET', 'POST'], name: 'watchlist')]
+    public function addToWatchlist(Program $program, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        if (!$program) {
+            throw $this->createNotFoundException(
+                'No program with this id found in program\'s table.'
+            );
+        }      
+     /** @var \App\Entity\User */
+        $user = $this->getUser();
 
+        if ($user->isInWatchlist($program)) {
+        $user->removeFromWatchlist($program);
+        $this->addFlash('info', 'The program has been deleted from your watchlist');
+        } else {
+        $user->addWatchlist($program);
+        
+        $this->addFlash('success', 'The program has been added to your watchlist');
+        }
+
+    $entityManager->flush();
+    return $this->redirectToRoute('program_show', ['slug' => $program->getSlug()], Response::HTTP_SEE_OTHER);
+    // return $this->json([
+    //     'isInWatchlist' => $this->getUser()->isInWatchlist($program)
+    // ]);
+    }
 }

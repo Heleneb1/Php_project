@@ -7,6 +7,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Faker\Factory;
+use DateTimeImmutable;
 
 class EpisodeFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -22,6 +23,9 @@ for ($programId = 1; $programId <= 10; $programId++) {
             $episode->setNumber($j);
             $episode->setTitle($faker->sentence());
             $episode->setSynopsis($faker->paragraphs(1, true));
+            $createdAt = DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months'));
+            $episode->setCreatedAt($createdAt);
+            
             // Obtention d'une référence à la saison correspondante
             $seasonReference = 'season_' . $programId . '_' . $seasonId;
             $episode->setSeason($this->getReference($seasonReference));

@@ -13,6 +13,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use DateTimeInterface;
 use DateTime;
 
+//TODO:Ajouter un champs pour les derniers épisodes
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
 #[Vich\Uploadable]
@@ -58,6 +59,9 @@ class Episode
       */
      #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'episode')]
      private Collection $comments;
+
+     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+     private ?\DateTimeImmutable $createdAt = null;
 
      public function __construct()
      {
@@ -185,6 +189,18 @@ class Episode
                 $comment->setEpisode(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

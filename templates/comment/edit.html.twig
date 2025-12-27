@@ -1,13 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Comment{% endblock %}
+{% block title %}Edit Comment
+{% endblock %}
 
 {% block body %}
-    <h1>Edit Comment</h1>
+	<h1>Edit Comment</h1>
+	{% if is_granted("ROLE_ADMIN") %}
 
-    {{ include('comment/_form.html.twig', {'button_label': 'Update'}) }}
+		{{ include('comment/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_comment_index') }}">back to list</a>
+		<a href="{{ path('app_comment_index') }}">back to list</a>
 
-    {{ include('comment/_delete_form.html.twig') }}
+		{{ include('comment/_delete_form.html.twig') }}
+	{% else %}
+		<p>Vous n'avez pas les droits pour accéder à cette page</p>
+	{% endif %}
 {% endblock %}

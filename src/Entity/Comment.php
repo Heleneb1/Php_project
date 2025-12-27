@@ -15,6 +15,7 @@ class Comment
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Translatable]
     private ?string $comment = null;
 
     #[ORM\Column]

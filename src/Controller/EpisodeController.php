@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Comment;
 use App\Form\CommentType;
-//TODO revoir l'ajout de commentaire dans le controller le deplacer dans programme controller
 
 #[Route('/episode')]
 class EpisodeController extends AbstractController

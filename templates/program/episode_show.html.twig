@@ -39,12 +39,12 @@
 			</div>
 			<div class="card-footer d-flex justify-content-between">
 				<a href="{{ path('program_show', { slug: program.slug }) }}" class="btn btn-outline-info">
-					<i class="bi bi-skip-backward-fill"></i>
+					<i class="bi bi-skip-backward-fill me-2"></i>
 					Retour à la série
 				</a>
 				<a href="{{ path('program_show_season', { programId: program.id, seasonId: season.id }) }}" class="btn btn-outline-info">
 					Retour à la saison
-					<i class="bi bi-skip-forward-fill"></i>
+					<i class="bi bi-skip-forward-fill ms-2"></i>
 				</a>
 			</div>
 			{% if app.user %}
