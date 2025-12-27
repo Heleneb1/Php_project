@@ -19,7 +19,6 @@
 **/docker-compose.*.yml
 **/docker-compose.yaml
 **/docker-compose.yml
-**/Dockerfile
 **/Thumbs.db
 .github/
 docs/
@@ -30,5 +29,6 @@ vendor/
 .editorconfig
 .env.*.local
 .env.local
-.env.local.php
+.env
+.env.*
 .env.test
