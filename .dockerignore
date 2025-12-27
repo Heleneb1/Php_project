@@ -1,34 +1,45 @@
-**/*.log
-**/*.md
-**/*.php~
-**/*.dist.php
-**/*.dist
-**/*.cache
-**/._*
-**/.dockerignore
-**/.DS_Store
-**/.git/
-**/.gitattributes
-**/.gitignore
-**/.gitmodules
-**/compose.*.yaml
-**/compose.*.yml
-**/compose.yaml
-**/compose.yml
-**/docker-compose.*.yaml
-**/docker-compose.*.yml
-**/docker-compose.yaml
-**/docker-compose.yml
-**/Thumbs.db
-.github/
+# Ignorer les fichiers inutiles
+*.log
+*.php~
+*.cache
+*.dist
+*.dist.php
+._*
+.DS_Store
+Thumbs.db
+
+# Ignorer Git
+.git/
+.gitignore
+.gitattributes
+.gitmodules
+
+# Ignorer les dossiers lourds
+node_modules/
+vendor/
+var/
+tests/
 docs/
 public/bundles/
-tests/
-var/
-vendor/
-.editorconfig
-.env.*.local
-.env.local
+
+# Ignorer les fichiers Compose (CapRover ne les utilise pas)
+compose.yaml
+compose.yml
+compose.*.yaml
+compose.*.yml
+docker-compose.yaml
+docker-compose.yml
+docker-compose.*.yaml
+docker-compose.*.yml
+
+# Ignorer les fichiers d'environnement SENSIBLES
 .env
-.env.*
+.env.local
+.env.*.local
 .env.test
+
+# MAIS NE PAS ignorer .env.local.php (important pour Symfony en prod)
+!.env.local.php
+
+# NE PAS ignorer Dockerfile
+# NE PAS ignorer .dockerignore
