@@ -2,6 +2,8 @@ FROM dunglas/frankenphp:latest-php8.3 AS frankenphp_prod
 
 WORKDIR /app
 
+
+
 # Dépendances système
 RUN apt-get update && apt-get install -y git unzip libpq-dev libzip-dev \
     && rm -rf /var/lib/apt/lists/*
@@ -14,6 +16,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Copier le code
 COPY . ./
+
+# Créer un fichier .env vide pour éviter l'erreur
+RUN echo "APP_ENV=prod" > .env
 
 # Préparer les dossiers et droits
 RUN mkdir -p var/cache var/log public/bundles \
