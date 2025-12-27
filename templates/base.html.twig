@@ -30,6 +30,12 @@
 console.log('Form is being submitted via Turbo:', event.target);
 });
 		</script>
+
+		<!-- jQuery -->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+
+		<!-- Bootstrap -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" defer></script>
 	</head>
 	<body
 		{{ stimulus_controller('theme') }} {{ stimulus_target('theme', 'body') }} data-turbo-suppress-warning>
@@ -62,7 +68,8 @@ console.log('Form is being submitted via Turbo:', event.target);
 		</div>
 
 		<!-- Footer -->
-		<footer class="mt-5">{% include '_footer.html.twig' %}
+		<footer class="mt-5">
+			{% include '_footer.html.twig' %}
 		</footer>
 
 		<!-- JavaScript -->

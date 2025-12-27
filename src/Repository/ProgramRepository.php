@@ -27,7 +27,19 @@ class ProgramRepository extends ServiceEntityRepository
     
         return $queryBuilder->getResult();
     }
-    //    /**
+
+    public function findWatchlist($userId)
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->join('p.viewers', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ->orderBy('p.title', 'ASC')
+            ->getQuery();
+    
+        return $queryBuilder->getResult();
+    }
+            //    /**
     //     * @return Program[] Returns an array of Program objects
     //     */
     //    public function findByExampleField($value): array

@@ -13,46 +13,45 @@
 				<div class="card">
 					<div class="card-body">
 						<h1 class="card-title">{{ actor.name }}</h1>
-						<div class="d-flex align-items-start">
-							<div class="flex-shrink-0 me-3">
-								{% if actor.picture %}
-									<img src="{{ vich_uploader_asset(actor, 'pictureFile') }}" alt="{{ actor.name }}" class="img-fluid rounded-start" style="max-width: 150px;">
-								{% elseif actor.gender == 'female' %}
-									<img src="{{ asset('uploads/images/female-actor.jpg') }}" class="img-fluid rounded-start" alt="{{ actor.name }}" style="max-width: 150px;">
-								{% elseif actor.gender == 'male' %}
-									<img src="{{ asset('uploads/images/male-actor.png') }}" class="img-fluid rounded-start" alt="{{ actor.name }}" style="max-width: 150px;">
-								{% endif %}
-							</div>
-							<div>
-								<p class="card-text strong">Biographie :
-									{{ actor.biography }}</p>
-							</div>
-						</div>
-						<h2 class="card-subtitle mt-3">Séries associées :</h2>
-						<ul class="list-group">
-							{% for program in actor.programs %}
-								<li class="list-group-item">
-									<a href="{{ path('program_show', { slug: program.slug }) }}">{{ program.title }}</a>
-								</li>
-							{% else %}
-								<li class="list-group-item">Aucune série associée.</li>
-							{% endfor %}
-						</ul>
-						<div class="card-footer d-flex justify-content-between">
-							{% if actor.programs|length > 0 %}
-								<a href="{{ path('program_show', { slug: actor.programs[0].slug }) }}" class="btn btn-outline-info">
-									<i class="bi bi-skip-backward-fill me-2"></i>
-									Retour à la série
-								</a>
-							{% endif %}
-							<a href="{{ path('app_actor_index') }}" class="btn btn-outline-info">Liste des acteurs
-								<i class="bi bi-skip-forward-fill ms-2"></i>
-							</a>
-						</a>
 
+						<div class=" col-md-4">
+							{% if actor.picture %}
+								<img src="{{ vich_uploader_asset(actor, 'pictureFile') }}" alt="{{ actor.name }}" class="img-fluid rounded-start" style="max-width: 150px;">
+							{% elseif actor.gender == 'female' %}
+								<img src="{{ asset('uploads/images/female-actor.jpg') }}" class="img-fluid rounded-start" alt="{{ actor.name }}" style="max-width: 150px;">
+							{% elseif actor.gender == 'male' %}
+								<img src="{{ asset('uploads/images/male-actor.png') }}" class="img-fluid rounded-start" alt="{{ actor.name }}" style="max-width: 150px;">
+							{% endif %}
+						</div>
+						<div>
+							<p class="card-text strong">Biographie :
+								{{ actor.biography }}</p>
+						</div>
 					</div>
+					<h2 class="card-subtitle mt-3">Séries associées :</h2>
+					<ul class="list-group">
+						{% for program in actor.programs %}
+							<li class="list-group-item">
+								<a href="{{ path('program_show', { slug: program.slug }) }}">{{ program.title }}</a>
+							</li>
+						{% else %}
+							<li class="list-group-item">Aucune série associée.</li>
+						{% endfor %}
+					</ul>
+					<div class="card-footer d-flex justify-content-between">
+						{% if actor.programs|length > 0 %}
+							<a href="{{ path('program_show', { slug: actor.programs[0].slug }) }}" class="btn btn-outline-info">
+								<i class="bi bi-skip-backward-fill me-2"></i>
+								Retour à la série
+							</a>
+						{% endif %}
+						<a href="{{ path('app_actor_index') }}" class="btn btn-outline-info">Liste des acteurs
+							<i class="bi bi-skip-forward-fill ms-2"></i>
+						</a>
+					</a>
+
 				</div>
 			</div>
 		</div>
 	</div>
-{% endblock %}
+</div>{% endblock %}

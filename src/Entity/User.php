@@ -81,12 +81,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?File $avatarFile = null;
 
     #[ORM\Column(type: TYPES:: DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null; // On ajoute un champ pour stocker temporairement le fichier avatar pas de colonne en base de données
-  
+    private ?\DateTimeInterface $updatedAt = null;
+
+    /**
+     * @var Collection<int, Program>
+     */
+    // #[ORM\ManyToMany(targetEntity: Program::class, inversedBy: 'viewers')]
+    // private Collection $watchlist; // On ajoute un champ pour stocker temporairement le fichier avatar pas de colonne en base de données
+    #[ORM\ManyToMany(targetEntity: Program::class, inversedBy:'viewers')]
+    #[ORM\JoinTable(name:'watchlist')]
+    private $watchlist;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->programs = new ArrayCollection();
+        $this->watchlist = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -309,5 +319,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Program>
+     */
+    public function getWatchlist(): Collection
+    {
+        return $this->watchlist;
+    }
+
+    public function addWatchlist(Program $program): self
+    {
+        if (!$this->watchlist->contains($program)) {
+            $this->watchlist[]=$program;
+        }
+
+        return $this;
+    }
+
+    public function removeFromWatchlist(Program $program): static
+    {
+        $this->watchlist->removeElement($program);
+
+        return $this;
+    }
+    public function isInWatchlist(Program $program): bool
+    {
+        return $this->watchlist->contains($program);
     }
 }

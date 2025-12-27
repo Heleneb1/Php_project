@@ -14,7 +14,7 @@ class SearchProgramType extends AbstractType
         $builder
             ->add('search' , SearchType::class, [
                 'label' => 'Rechercher un programme',
-                'attr' => ['placeholder' => 'Nom du programme']
+                'attr' => ['placeholder'=>'Search for a program']
             ])
         ;
     }

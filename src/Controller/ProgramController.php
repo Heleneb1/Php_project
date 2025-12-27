@@ -10,6 +10,8 @@ use App\Repository\SeasonRepository;
 use App\Entity\Program;
 use App\Entity\Season;
 use App\Entity\Episode;
+use App\Repository\EpisodeRepository;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +28,8 @@ use App\Form\CommentType;
 use App\Entity\Comment;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use App\Form\SearchProgramType;
-
+use App\Repository\CommentRepository;
+use App\Repository\UserRepository;
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
@@ -314,6 +317,30 @@ class ProgramController extends AbstractController
 
         return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
     }
-   
+    #[Route('/{id}/watchlist', methods: ['GET', 'POST'], name: 'watchlist')]
+    public function addToWatchlist(Program $program, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        if (!$program) {
+            throw $this->createNotFoundException(
+                'No program with this id found in program\'s table.'
+            );
+        }      
+     /** @var \App\Entity\User */
+        $user = $this->getUser();
 
+        if ($user->isInWatchlist($program)) {
+        $user->removeFromWatchlist($program);
+        $this->addFlash('info', 'The program has been deleted from your watchlist');
+        } else {
+        $user->addWatchlist($program);
+        
+        $this->addFlash('success', 'The program has been added to your watchlist');
+        }
+
+    $entityManager->flush();
+    return $this->redirectToRoute('program_show', ['slug' => $program->getSlug()], Response::HTTP_SEE_OTHER);
+    // return $this->json([
+    //     'isInWatchlist' => $this->getUser()->isInWatchlist($program)
+    // ]);
+    }
 }
