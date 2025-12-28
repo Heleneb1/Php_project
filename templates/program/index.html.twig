@@ -30,7 +30,7 @@
 							{% if program.poster %}
 								<img src="{{ vich_uploader_asset(program) }}" class="card-img-top" alt="{{ program.title }}">
 							{% else %}
-								<img src="{{ asset('uploads/images/default-poster.png') }}" class="card-img-top" alt="{{ program.title }}">
+								<img src="{{ asset('images/defaults/default-poster.png') }}" class="card-img-top" alt="{{ program.title }}">
 							{% endif %}
 							<div class="card-body d-flex flex-column">
 								<h5 class="card-title">{{ program.title }}</h5>

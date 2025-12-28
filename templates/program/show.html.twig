@@ -13,7 +13,7 @@
 					{% if program.poster %}
 						<img src="{{ vich_uploader_asset(program, 'posterFile') }}" alt="{{ program.title }}" class="img-fluid rounded-start">
 					{% else %}
-						<img src="{{ asset('uploads/images/default-poster.png') }}" alt="{{ program.title }}" class="img-fluid rounded-start">
+						<img src="{{ asset('images/defaults/default-poster.png') }}" alt="{{ program.title }}" class="img-fluid rounded-start">
 					{% endif %}
 				</div>
 				<div class="col-md-8">
@@ -78,9 +78,9 @@
 						{% if actor.picture %}
 							<img src="{{ vich_uploader_asset(actor, 'pictureFile') }}" alt="{{ actor.name }}" class="card-img-top actor-image">
 						{% elseif actor.gender == 'female' %}
-							<img src="{{ asset('uploads/images/female-actor.jpg') }}" class="card-img-top actor-image" alt="{{ actor.name }}">
+							<img src="{{ asset('images/defaults/female-actor.jpg') }}" class="card-img-top actor-image" alt="{{ actor.name }}">
 						{% elseif actor.gender == 'male' %}
-							<img src="{{ asset('uploads/images/male-actor.png') }}" class="card-img-top actor-image" alt="{{ actor.name }}">
+							<img src="{{ asset('images/defaults/male-actor.png') }}" class="card-img-top actor-image" alt="{{ actor.name }}">
 						{% endif %}
 						<div class="card-body">
 							<h5 class="card-title">{{ actor.name }}</h5>
