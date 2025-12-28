@@ -2,6 +2,8 @@ FROM dunglas/frankenphp:latest-php8.3 AS frankenphp_prod
 
 WORKDIR /app
 
+RUN touch .env
+
 # Dépendances système
 RUN apt-get update && apt-get install -y git unzip libpq-dev libzip-dev curl \
     && rm -rf /var/lib/apt/lists/*
