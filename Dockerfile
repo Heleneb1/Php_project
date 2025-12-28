@@ -22,8 +22,11 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Copier le code
 COPY . ./
 
-# Installer dépendances front
-RUN yarn install --frozen-lockfile
+# Installer dépendances PHP (crée vendor/)
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+# Installer dépendances front (vendor/ existe maintenant)
+RUN yarn install
 RUN yarn build
 
 # Vérifier build
@@ -32,10 +35,6 @@ RUN ls -al public/build
 # Préparer les dossiers et droits
 RUN mkdir -p var/cache var/log public/bundles \
     && chown -R www-data:www-data var public/bundles
-
-# Installer dépendances PHP
-RUN composer install --no-dev --optimize-autoloader --no-scripts \
-    && composer dump-autoload --classmap-authoritative
 
 # Copier le Caddyfile
 COPY docker/frankenphp/Caddyfile /etc/caddy/Caddyfile
