@@ -3,10 +3,6 @@ FROM dunglas/frankenphp:latest-php8.3 AS frankenphp_prod
 
 WORKDIR /app
 
-# Définir l'environnement prod dès le départ
-ENV APP_ENV=prod
-ENV APP_DEBUG=0
-
 # Dépendances système
 RUN apt-get update && apt-get install -y git unzip libzip-dev curl \
     && rm -rf /var/lib/apt/lists/*
@@ -25,11 +21,11 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Copier le code
 COPY . ./
 
-# Créer un .env vide si absent pour éviter Symfony Dotenv error
-RUN [ -f .env ] || touch .env
+# Créer .env si besoin
+RUN touch .env
 
-# Installer les dépendances PHP (sans dev)
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+# Installer les dépendances sans lancer les scripts (évite les erreurs DATABASE_URL)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 # Installer et builder le front avec Yarn
 RUN yarn install --frozen-lockfile && yarn build
@@ -38,14 +34,16 @@ RUN yarn install --frozen-lockfile && yarn build
 RUN php bin/console importmap:install --force --no-interaction \
     && php bin/console assets:install --symlink --relative
 
-# Préparer cache prod et droits
-RUN php bin/console cache:clear --env=prod --no-warmup \
-    && php bin/console cache:warmup --env=prod \
-    && mkdir -p var/cache var/log public/bundles public/vendor public/build \
+# Préparer les dossiers et droits
+RUN mkdir -p var/cache var/log public/bundles public/vendor public/build \
     && chown -R www-data:www-data var public/bundles public/vendor public/build
 
 # Copier le Caddyfile
 COPY docker/frankenphp/Caddyfile /etc/caddy/Caddyfile
 
-# Commande de lancement
-CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
+# Commande de lancement : ici le cache sera clear/warmup à runtime
+CMD ["sh", "-c", "\
+    php bin/console cache:clear --env=prod --no-warmup && \
+    php bin/console cache:warmup --env=prod && \
+    frankenphp run --config /etc/caddy/Caddyfile \
+    "]
