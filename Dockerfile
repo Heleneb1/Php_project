@@ -20,6 +20,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Copier le code
 COPY . ./
 
+RUN touch .env
+
 # Installer les dépendances PHP
 RUN composer install --no-dev --optimize-autoloader
 
