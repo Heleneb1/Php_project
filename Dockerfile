@@ -23,7 +23,7 @@ COPY . ./
 RUN touch .env
 
 # Installer les dépendances PHP
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+RUN composer install --no-dev --optimize-autoloader
 
 # Installer importmap pour Stimulus/Turbo si utilisé
 RUN php bin/console importmap:install --force --no-interaction \
@@ -45,6 +45,7 @@ COPY docker/frankenphp/Caddyfile /etc/caddy/Caddyfile
 
 # Variables d'environnement
 ENV APP_ENV=prod
+ENV APP_DEBUG=0
 
 # Commande de lancement
 CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
