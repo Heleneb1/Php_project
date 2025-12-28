@@ -1,12 +1,17 @@
 FROM dunglas/frankenphp
 
 ENV SERVER_NAME=:80
+ENV NODE_VERSION=20
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
+# Installer git, unzip et Node.js
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
+    curl \
+    && curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -17,10 +22,12 @@ WORKDIR /app
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
+# Compiler les assets Webpack
+RUN npm install && npm run build
+
 RUN mkdir -p var/cache var/log \
     && chown -R www-data:www-data var
 
-# Copier votre Caddyfile personnalisé au bon endroit
 COPY docker/frankenphp/Caddyfile /etc/frankenphp/Caddyfile
 
 EXPOSE 80
