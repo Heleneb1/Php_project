@@ -5,6 +5,8 @@
         X-Forwarded-Proto {scheme}
     }
 
-    php_server
-    file_server
+    route {
+        php_server
+        file_server
+    }
 }

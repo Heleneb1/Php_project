@@ -26,7 +26,10 @@ RUN touch .env
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 # Installer importmap pour Stimulus/Turbo si utilisé
-RUN php bin/console importmap:install --force || true
+RUN php bin/console importmap:install --force \
+    && php bin/console assets:install --symlink --relative \
+    && php bin/console cache:clear --env=prod
+
 
 # Installer et builder le front
 RUN yarn install && yarn build
