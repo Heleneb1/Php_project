@@ -3,7 +3,7 @@ FROM dunglas/frankenphp:latest-php8.3 AS frankenphp_prod
 WORKDIR /app
 
 # Dépendances système
-RUN apt-get update && apt-get install -y git unzip libpq-dev libzip-dev curl \
+RUN apt-get update && apt-get install -y git unzip libzip-dev curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Node.js + Yarn
@@ -21,7 +21,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY . ./
 
 # Installer les dépendances PHP
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+RUN composer install --no-dev --optimize-autoloader
 
 # Installer importmap pour Stimulus/Turbo si utilisé
 RUN php bin/console importmap:install --force || true
@@ -31,7 +31,9 @@ RUN yarn install && yarn build
 
 # Préparer les dossiers et droits
 RUN mkdir -p var/cache var/log public/bundles \
-    && chown -R www-data:www-data var public/bundles
+    && chown -R www-data:www-data var public/bundles \
+    && chown -R www-data:www-data var
+
 
 # Copier le Caddyfile
 COPY docker/frankenphp/Caddyfile /etc/caddy/Caddyfile
