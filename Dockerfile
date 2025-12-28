@@ -25,6 +25,9 @@ WORKDIR /app
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
+# Installer les assets via AssetMapper
+RUN php bin/console importmap:install
+
 # Compiler les assets Webpack
 RUN npm install && npm run build
 
