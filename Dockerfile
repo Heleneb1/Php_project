@@ -1,17 +1,17 @@
-FROM dunglas/frankenphp:latest-php8.3
-WORKDIR /app
+FROM dunglas/frankenphp
 
-COPY . ./
+# Be sure to replace "your-domain-name.example.com" by your domain name
+ENV SERVER_NAME=myseries.lesmysteresdelegypteantique.fr:443
+# If you want to disable HTTPS, use this value instead:
+ENV SERVER_NAME=:80
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts \
-    && yarn install --frozen-lockfile && yarn build \
-    && php bin/console importmap:install --force --no-interaction \
-    && php bin/console assets:install --symlink --relative
+# If your project is not using the "public" directory as the web root, you can set it here:
+# ENV SERVER_ROOT=web/
 
-# Préparer dossiers et droits
-RUN mkdir -p var/cache var/log public/bundles public/vendor public/build \
-    && chown -R www-data:www-data var public/bundles public/vendor public/build
+# Enable PHP production settings
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-COPY docker/frankenphp/Caddyfile /etc/caddy/Caddyfile
-
-CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
+# Copy the PHP files of your project in the public directory
+COPY . /app/public
+# If you use Symfony or Laravel, you need to copy the whole project instead:
+COPY . /app
