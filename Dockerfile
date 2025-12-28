@@ -25,11 +25,17 @@ WORKDIR /app
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
+# Utiliser une DATABASE_URL factice pour le build
+ENV DATABASE_URL="sqlite:///:memory:"
+
 # Installer les assets via AssetMapper
 RUN php bin/console importmap:install
 
 # Compiler les assets Webpack
 RUN npm install && npm run build
+
+# Supprimer la variable factice (sera remplacée par CapRover au runtime)
+ENV DATABASE_URL=""
 
 RUN mkdir -p var/cache var/log \
     && chown -R www-data:www-data var
