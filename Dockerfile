@@ -3,10 +3,16 @@ FROM dunglas/frankenphp:latest-php8.3 AS frankenphp_prod
 
 WORKDIR /app
 
+# Copier le env prod
+COPY .env.prod .env
+
+# Définir l'environnement prod
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
+
 # ---- Variables d'environnement prod ----
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
-ENV DATABASE_URL="mysql://user:password@db:3306/my_database"
 
 # ---- Dépendances système ----
 RUN apt-get update && apt-get install -y git unzip libzip-dev curl \
