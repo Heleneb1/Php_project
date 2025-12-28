@@ -16,6 +16,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Copier le code
 COPY . ./
+RUN echo "CONTENU DE /app :" && ls -al /app
+
 
 # Préparer les dossiers et droits
 RUN mkdir -p var/cache var/log public/bundles \
