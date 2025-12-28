@@ -8,7 +8,7 @@
 /public/bundles/
 /var/
 /vendor/
-/.env
+
 /node_modules/
 ###< symfony/framework-bundle ###
 

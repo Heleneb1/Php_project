@@ -27,5 +27,3 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 RUN mkdir -p var/cache var/log \
     && chown -R www-data:www-data var
 
-# Optionnel : vider le cache Symfony en production
-RUN php bin/console cache:clear --env=prod --no-debug || true
