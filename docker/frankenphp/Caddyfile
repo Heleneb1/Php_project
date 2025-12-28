@@ -5,13 +5,8 @@
 :80 {
     root * /app/public
 
-    php_server {
-        env APP_ENV
-        env APP_DEBUG
-        env APP_SECRET
-        env DATABASE_URL
-        env MAILER_DSN
+    route {
+        php_server
+        file_server
     }
-
-    file_server
 }
