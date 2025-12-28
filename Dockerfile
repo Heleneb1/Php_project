@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
+# Installer l'extension PDO MySQL
+RUN install-php-extensions pdo_mysql
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY . /app
