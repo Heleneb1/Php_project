@@ -45,5 +45,7 @@ COPY docker/frankenphp/Caddyfile /etc/caddy/Caddyfile
 CMD ["sh", "-c", "\
     php bin/console cache:clear --env=prod --no-warmup && \
     php bin/console cache:warmup --env=prod && \
+    php bin/console importmap:install --force --no-interaction && \
+    php bin/console assets:install --symlink --relative && \
     frankenphp run --config /etc/caddy/Caddyfile \
     "]
