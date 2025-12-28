@@ -8,5 +8,23 @@
     route {
         php_server
         file_server
+    }{
+    frankenphp
+
+    env APP_ENV
+    env APP_DEBUG
+    env APP_SECRET
+    env DATABASE_URL
+    env MAILER_DSN
+}
+
+:80 {
+    root * /app/public
+
+    route {
+        php_server
+        file_server
     }
+}
+
 }
