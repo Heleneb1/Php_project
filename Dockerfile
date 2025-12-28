@@ -23,7 +23,7 @@ COPY . ./
 RUN touch .env
 
 # Installer les dépendances PHP
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 # Installer importmap pour Stimulus/Turbo si utilisé
 RUN php bin/console importmap:install --force || true
