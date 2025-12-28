@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y git unzip libpq-dev libzip-dev curl \
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
+# Installer Yarn
+RUN npm install -g yarn
+
 # Extensions PHP
 RUN install-php-extensions pdo_mysql intl zip opcache apcu redis
 
@@ -20,8 +23,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY . ./
 
 # Installer dépendances front
-RUN npm install
-RUN npm run build
+RUN yarn install --frozen-lockfile
+RUN yarn build
 
 # Vérifier build
 RUN ls -al public/build
