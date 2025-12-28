@@ -20,8 +20,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 RUN mkdir -p var/cache var/log \
     && chown -R www-data:www-data var
 
-# Exposer le port 80
-EXPOSE 80
+# Copier votre Caddyfile personnalisé au bon endroit
+COPY docker/frankenphp/Caddyfile /etc/frankenphp/Caddyfile
 
-# Optionnel : vérifier que le serveur démarre
-CMD ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile"]
+EXPOSE 80
