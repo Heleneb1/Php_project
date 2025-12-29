@@ -5,6 +5,6 @@ vich_uploader:
   mappings:
     poster_file:
       # alias qui nous permet d'accéder à nos images depuis le navigateur
-      uri_prefix: /images/defaults/posters
+      uri_prefix: /uploads/images/posters
       upload_destination: "%upload_directory%"
       namer: Vich\UploaderBundle\Naming\SmartUniqueNamer

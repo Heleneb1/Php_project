@@ -9,7 +9,7 @@
 							{% if episode.poster %}
 								<img src="{{ vich_uploader_asset(episode, 'posterFile') }}" class="img-fluid" alt="{{ episode.title }}">
 							{% else %}
-								<img src="{{ asset('images/defaults/episode-default.jpg') }}" class="img-fluid" alt="{{ episode.title }}">
+								<img src="{{ asset('uploads/images/episode-default.jpg') }}" class="img-fluid" alt="{{ episode.title }}">
 							{% endif %}
 							<h5 class="card-title">{{ episode.title }}</h5>
 							<p class="card-subtitle mb-2 text-muted">

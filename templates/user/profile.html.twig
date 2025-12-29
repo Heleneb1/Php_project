@@ -15,7 +15,7 @@
 						{% if user.avatar %}
 							<img src="{{ vich_uploader_asset(user, 'avatarFile') }}" class="img-fluid rounded custom-avatar" alt="{{ user.lastname }} {{ user.firstname }}">
 						{% else %}
-							<img src="{{ asset('images/defaults/avatar-default.jpg') }}" class="img-fluid rounded custom-avatar" alt="{{ user.lastname }} {{ user.firstname }}">
+							<img src="{{ asset('uploads/images/avatar-default.jpg') }}" class="img-fluid rounded custom-avatar" alt="{{ user.lastname }} {{ user.firstname }}">
 						{% endif %}
 					</li>
 					<!-- Formulaire pour changer l'image de profil -->

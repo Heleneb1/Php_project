@@ -18,9 +18,9 @@
 							{% if actor.picture %}
 								<img src="{{ vich_uploader_asset(actor, 'pictureFile') }}" alt="{{ actor.name }}" class="img-fluid rounded-start" style="max-width: 150px;">
 							{% elseif actor.gender == 'female' %}
-								<img src="{{ asset('images/defaults/female-actor.jpg') }}" class="img-fluid rounded-start" alt="{{ actor.name }}" style="max-width: 150px;">
+								<img src="{{ asset('uploads/images/female-actor.jpg') }}" class="img-fluid rounded-start" alt="{{ actor.name }}" style="max-width: 150px;">
 							{% elseif actor.gender == 'male' %}
-								<img src="{{ asset('images/defaults/male-actor.png') }}" class="img-fluid rounded-start" alt="{{ actor.name }}" style="max-width: 150px;">
+								<img src="{{ asset('uploads/images/male-actor.png') }}" class="img-fluid rounded-start" alt="{{ actor.name }}" style="max-width: 150px;">
 							{% endif %}
 						</div>
 						<div>
