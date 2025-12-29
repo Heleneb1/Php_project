@@ -33,7 +33,7 @@ class Program
         maxMessage: 'Le titre saisi {{ value }} est trop long, il ne devrait pas dépasser {{ limit }} caractères'
     )]
     private ?string $title = null;
-    
+
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank(message: 'Le synopsis ne doit pas être vide')]
@@ -44,15 +44,15 @@ class Program
     )]
     private ?string $synopsis = null;
 
-    
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $poster = null;
 
-  
+
     #[Vich\UploadableField(mapping: 'poster_file', fileNameProperty: 'poster')]
     #[Assert\File(
-    maxSize: '1M',
-    mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+        maxSize: '1M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
     )]
     private ?File $posterFile = null; // On ajoute un champ pour stocker temporairement le fichier poster pas de colonne en base de données
 
@@ -68,17 +68,17 @@ class Program
 
     /**
      * //si on veut ajouter un acteur à un programme
-   * @var Collection<int, Actor>
+     * @var Collection<int, Actor>
      */
     #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'programs', fetch: 'EXTRA_LAZY')]
     #[ORM\JoinTable(name: 'actor_program')]
     private Collection $actors;
-     //si la relation est bidirectionnelle, on doit ajouter les méthodes addActor et removeActor
+    //si la relation est bidirectionnelle, on doit ajouter les méthodes addActor et removeActor
     //si pas de resultat on doit inverser le mappedBy et inversedBy
 
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
-   
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DatetimeInterface $updatedAt = null;
 
@@ -155,11 +155,11 @@ class Program
     /**
      * @return Collection<int, Season>
      */
-  /**
- * @return Collection<int, Season>
- */
+    /**
+     * @return Collection<int, Season>
+     */
 
-   
+
     public function getSeasons(): Collection
     {
         return $this->seasons;
@@ -198,16 +198,16 @@ class Program
             $this->actors[] = $actor;
             $actor->addProgram($this); // Ajoutez cette ligne
         }
-    
+
         return $this;
     }
-    
+
     public function removeActor(Actor $actor): self
     {
         if ($this->actors->removeElement($actor)) {
             $actor->removeProgram($this); // Ajoutez cette ligne
         }
-    
+
         return $this;
     }
 
@@ -222,18 +222,18 @@ class Program
 
         return $this;
     }
-    public function setPosterFile(File $image = null): Program
+    public function setPosterFile(?File $image = null): Program
     {
-       $this->posterFile = $image;
-       if ($image) {
-          $this->updatedAt = new DateTime('now');
-       }
-    
-       return $this;
+        $this->posterFile = $image;
+        if ($image) {
+            $this->updatedAt = new DateTime('now');
+        }
+
+        return $this;
     }
     public function getPosterFile(): ?File
     {
-       return $this->posterFile;
+        return $this->posterFile;
     }
     public function getUpdatedAt(): ?DatetimeInterface
     {
@@ -278,7 +278,7 @@ class Program
     public function removeViewer(User $viewer): static
     {
         if ($this->viewers->removeElement($viewer)) {
-            $viewer->removeWatchlist($this);
+            $viewer->removeFromWatchlist($this);
         }
 
         return $this;
